@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>English Start A0 · Sesión 8 · Objetos del salón</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --slate-green:#2d5a27;--slate-green-dark:#1e3d1a;--slate-green-light:#3d7a35;
+  --cream:#f2efe6;--cream-dark:#e8e4d8;--white:#ffffff;
+  --near-bg:#eaf3fd;--near-accent:#1a6bbb;
+  --far-bg:#fef6e7;--far-accent:#c97d1a;
+  --ok-bg:#eaf6ef;--ok-accent:#1d8a58;
+  --err-bg:#fff0f0;--err-accent:#c93030;
+  --warn-bg:#fff8e1;--warn-border:#ffe082;
+  --text:#1a1a1a;--text-muted:#555;--border:#ddd;
+  --radius:16px;--shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);font-size:16px;line-height:1.6;min-height:100vh}
+
+/* PROGRESS */
+#progress-bar{background:var(--slate-green-dark);padding:12px 20px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px}
+.prog-step{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:500;color:rgba(255,255,255,0.45);cursor:default;white-space:nowrap}
+.prog-step .dot{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:rgba(255,255,255,0.45);border:2px solid rgba(255,255,255,0.2);flex-shrink:0}
+.prog-step.done .dot{background:var(--ok-accent);border-color:var(--ok-accent);color:#fff}
+.prog-step.active .dot{background:var(--white);border-color:var(--white);color:var(--slate-green-dark)}
+.prog-step.active{color:#fff;font-weight:600}.prog-step.done{color:rgba(255,255,255,0.7)}
+.prog-connector{width:20px;height:2px;background:rgba(255,255,255,0.2);flex-shrink:0}
+.prog-connector.done-line{background:var(--ok-accent)}
+
+/* HEADER */
+header{background:var(--slate-green);color:#fff;padding:32px 24px 28px;text-align:center}
+header .course-label{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:8px}
+header h1{font-family:'DM Serif Display',serif;font-size:clamp(22px,4vw,36px);font-weight:400;line-height:1.2;margin-bottom:6px}
+header .sub{font-size:14px;color:rgba(255,255,255,0.75);font-weight:300}
+
+/* MAIN */
+main{max-width:880px;margin:0 auto;padding:32px 20px 60px}
+
+/* BLOCK */
+.block{display:none;animation:fadeUp 0.4s ease both}
+.block.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.block-header{margin-bottom:28px}
+.block-pill{display:inline-block;padding:4px 14px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px}
+.pill-1{background:#e0ebe0;color:var(--slate-green)}
+.pill-2{background:#dce8f5;color:#1a4d7a}
+.pill-3{background:#f0e8fd;color:#5a2d87}
+.pill-4{background:#fde8cc;color:#8a4a00}
+.pill-5{background:#fce4e4;color:#8a1a1a}
+.block-title{font-family:'DM Serif Display',serif;font-size:clamp(20px,3.5vw,30px);font-weight:400;color:var(--slate-green-dark);margin-bottom:6px}
+.block-desc{font-size:15px;color:var(--text-muted);font-weight:300;max-width:640px}
+
+/* CARD */
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(0,0,0,0.06);padding:24px;margin-bottom:20px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border:2px solid transparent;transition:all .18s ease}
+.btn-primary{background:var(--slate-green);color:#fff;border-color:var(--slate-green)}
+.btn-primary:hover{background:var(--slate-green-dark);border-color:var(--slate-green-dark)}
+.btn-secondary{background:transparent;color:var(--far-accent);border-color:var(--far-accent)}
+.btn-secondary:hover{background:var(--far-bg)}
+.btn-verify{background:#1a6bbb;color:#fff;border-color:#1a6bbb}
+.btn-verify:hover{background:#155299}
+.btn-retry{background:transparent;color:var(--err-accent);border-color:var(--err-accent)}
+.btn-retry:hover{background:var(--err-bg)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* AUDIO */
+.audio-btn{width:30px;height:30px;border-radius:50%;background:var(--near-bg);border:1.5px solid var(--near-accent);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0}
+.audio-btn:hover{background:#c8def5}
+.audio-btn svg{width:14px;height:14px;fill:var(--near-accent)}
+
+/* WARN BOX */
+.warn-box{background:var(--warn-bg);border:1.5px solid var(--warn-border);border-radius:12px;padding:14px 18px;font-size:14px;margin-top:14px}
+.warn-box .warn-title{font-weight:600;color:#7a5a00;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.warn-box .wrong{color:var(--err-accent);font-weight:600}
+.warn-box .right{color:var(--ok-accent);font-weight:600}
+
+/* NAV */
+.block-nav{display:flex;justify-content:flex-end;margin-top:24px}
+
+/* ══════════ BLOCK 1 — DISCOVER (NEW INTERACTIVE STYLE) ══════════ */
+.discover-intro{background:linear-gradient(135deg,#1e3d1a 0%,#2d5a27 100%);color:#fff;border-radius:16px;padding:20px 24px;margin-bottom:20px;font-size:14px;line-height:1.7}
+.discover-intro strong{color:#a8d88a}
+
+.tab-switcher{display:flex;gap:8px;margin-bottom:16px;border-bottom:2px solid var(--border);padding-bottom:0}
+.tab-btn{padding:8px 18px;border:none;background:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;color:var(--text-muted);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s}
+.tab-btn.active{color:var(--near-accent);border-bottom-color:var(--near-accent);font-weight:600}
+
+/* Interactive sentence cards for DISCOVER */
+.sent-cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.sent-card{border-radius:14px;padding:14px;cursor:pointer;border:2px solid transparent;transition:all .2s;position:relative;overflow:hidden}
+.sent-card.near-card{background:var(--near-bg);border-color:#b8d8f5}
+.sent-card.far-card{background:var(--far-bg);border-color:#f0d8a0}
+.sent-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.12)}
+.sent-card.revealed{border-width:2px}
+.sent-card.near-card.revealed{border-color:var(--near-accent)}
+.sent-card.far-card.revealed{border-color:var(--far-accent)}
+
+.sent-card .sc-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sent-card .sc-icon{width:48px;height:48px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.sent-card .sc-badge{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:100px;margin-left:auto}
+.near-card .sc-badge{background:var(--near-accent);color:#fff}
+.far-card .sc-badge{background:var(--far-accent);color:#fff}
+.sent-card .sc-sentence{font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px}
+.sent-card .sc-dem{font-size:13px;font-weight:700;padding:2px 8px;border-radius:6px;display:inline-block;margin-right:4px}
+.near-card .sc-dem{background:#c0daef;color:var(--near-accent)}
+.far-card .sc-dem{background:#f0ddb0;color:var(--far-accent)}
+.sent-card .sc-noun{color:var(--slate-green);font-weight:700}
+.sent-card .sc-note{font-size:12px;color:var(--text-muted);margin-top:4px}
+.sent-card .sc-scene{width:100%;height:80px;margin-top:10px;border-radius:10px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;background:rgba(255,255,255,0.5)}
+
+.scene-row{display:flex;align-items:flex-end;justify-content:center;gap:6px;height:80px;padding-bottom:4px}
+
+/* DISCOVER — new colored sentence strip layout */
+.disc-sentence-list{display:flex;flex-direction:column;gap:16px;margin-bottom:20px}
+.disc-sent-row{border-radius:14px;padding:16px 18px;cursor:pointer;transition:all .2s;border:2px solid transparent;position:relative}
+.disc-sent-row:hover{transform:translateX(4px);box-shadow:0 4px 18px rgba(0,0,0,0.10)}
+.disc-sent-row.near-row{background:var(--near-bg);border-color:#b8d8f5}
+.disc-sent-row.far-row{background:var(--far-bg);border-color:#f0d8a0}
+.disc-sent-row.revealed-row.near-row{border-color:var(--near-accent)}
+.disc-sent-row.revealed-row.far-row{border-color:var(--far-accent)}
+
+.disc-row-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.disc-scene-wrap{display:flex;align-items:flex-end;gap:4px;min-width:60px;justify-content:center}
+.disc-text-block{flex:1;min-width:180px}
+.disc-english{font-size:17px;font-weight:600;color:var(--text);line-height:1.3}
+.disc-dem-chip{display:inline-block;padding:2px 9px;border-radius:6px;font-weight:700;margin-right:3px}
+.near-row .disc-dem-chip{background:#c0daef;color:var(--near-accent)}
+.far-row .disc-dem-chip{background:#f0ddb0;color:var(--far-accent)}
+.disc-noun-chip{color:var(--slate-green);font-weight:700}
+.disc-spanish{font-size:12px;color:var(--text-muted);margin-top:3px}
+.disc-badge{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:100px;white-space:nowrap}
+.near-row .disc-badge{background:var(--near-accent);color:#fff}
+.far-row .disc-badge{background:var(--far-accent);color:#fff}
+.disc-tap-hint{font-size:11px;color:var(--text-muted);font-style:italic;margin-top:6px;opacity:.7}
+
+.disc-reveal-panel{display:none;margin-top:12px;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.6}
+.near-row .disc-reveal-panel{background:rgba(255,255,255,0.7);border:1px solid #b8d8f5;color:#1a4a7a}
+.far-row .disc-reveal-panel{background:rgba(255,255,255,0.7);border:1px solid #e8c87a;color:#7a4a00}
+.disc-reveal-panel.open{display:block;animation:fadeUp .25s ease}
+
+.hyp-section{margin-top:20px}
+.hyp-section h4{font-family:'DM Serif Display',serif;font-size:17px;color:var(--slate-green-dark);margin-bottom:12px}
+.hypothesis-group{margin-bottom:16px}
+.hypothesis-group label{display:block;font-size:13px;font-weight:500;color:var(--text-muted);margin-bottom:6px}
+.hypothesis-group textarea{width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:14px;resize:vertical;min-height:58px;background:var(--white);color:var(--text);transition:border-color .15s}
+.hypothesis-group textarea:focus{outline:none;border-color:var(--near-accent)}
+#confirmation-box{display:none;background:var(--ok-bg);border:1.5px solid var(--ok-accent);border-radius:12px;padding:18px 20px;margin-top:16px;animation:fadeUp .3s ease}
+#confirmation-box h4{font-family:'DM Serif Display',serif;color:var(--ok-accent);margin-bottom:10px;font-size:18px}
+#confirmation-box p{font-size:14px;color:#1a4a30;margin-bottom:7px}
+#confirmation-box .conf-tag{display:inline-block;padding:2px 8px;border-radius:6px;font-weight:700;font-size:13px;margin-right:4px}
+.conf-tag-near{background:#c0daef;color:var(--near-accent)}
+.conf-tag-far{background:#f0ddb0;color:var(--far-accent)}
+.conf-tag-ok{background:#c0e8d0;color:var(--ok-accent)}
+
+/* ══════════ BLOCK 2 — EXPLANATION ══════════ */
+.sub-section{margin-bottom:28px}
+.sub-section h3{font-family:'DM Serif Display',serif;font-size:20px;color:var(--slate-green-dark);margin-bottom:14px}
+
+/* 2A colored rule cards */
+.rule-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.rule-card{border-radius:14px;padding:16px;border:2px solid transparent}
+.rc-base{background:#e8f0e8;border-color:#a8ccA8}
+.rc-es{background:#e8eef8;border-color:#a8c0e0}
+.rc-verb{background:#fef3e2;border-color:#f0d090}
+.rc-art{background:#fce8e8;border-color:#e0b0b0}
+.rule-card .rc-label{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px}
+.rc-base .rc-label{color:#2d6a2d}
+.rc-es .rc-label{color:#2d4a8a}
+.rc-verb .rc-label{color:#8a5a00}
+.rc-art .rc-label{color:#8a2a2a}
+.rule-card .rc-rule{font-size:15px;font-weight:600;margin-bottom:6px}
+.rule-card .rc-ex{font-size:13px;color:var(--text-muted);font-style:italic}
+.rule-card code{background:rgba(0,0,0,0.08);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:13px}
+
+/* 2A — visual examples strips */
+.rule-examples-strip{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.rex-card{border-radius:12px;padding:14px 16px;border:1.5px solid transparent;display:flex;align-items:center;gap:12px}
+.rex-singular{background:#eaf6ef;border-color:#a8d8b8}
+.rex-plural{background:#e8eef8;border-color:#a8c0e0}
+.rex-card .rex-icons{display:flex;gap:4px;align-items:flex-end;min-width:56px}
+.rex-card .rex-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.rex-singular .rex-label{color:var(--ok-accent)}
+.rex-plural .rex-label{color:#2d4a8a}
+.rex-card .rex-sent{font-size:14px;font-weight:600}
+.rex-singular .rex-sent em{color:var(--ok-accent)}
+.rex-plural .rex-sent em{color:#2d4a8a}
+
+/* 2B distance diagram */
+.distance-diagram{display:flex;align-items:stretch;border-radius:14px;overflow:hidden;margin-bottom:20px;border:1px solid var(--border)}
+.dist-near{flex:1;background:var(--near-bg);padding:20px;text-align:center}
+.dist-person{width:64px;background:var(--cream-dark);display:flex;align-items:center;justify-content:center;border-left:2px dashed var(--border);border-right:2px dashed var(--border);padding:10px}
+.dist-far{flex:1;background:var(--far-bg);padding:20px;text-align:center}
+.dist-near h4,.dist-far h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.dist-near h4{color:var(--near-accent)}.dist-far h4{color:var(--far-accent)}
+.dist-word{font-family:'DM Serif Display',serif;font-size:24px;margin-bottom:3px}
+.dist-near .dist-word{color:var(--near-accent)}.dist-far .dist-word{color:var(--far-accent)}
+.dist-sub{font-size:12px;color:var(--text-muted)}
+
+/* 2B dem examples with images - BIGGER, more visual */
+.dem-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.dem-ex{border-radius:14px;padding:18px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.dem-ex.near-ex{background:var(--near-bg);border:2px solid #b8d8f5}
+.dem-ex.far-ex{background:var(--far-bg);border:2px solid #f0d898}
+.dem-ex .de-icons{display:flex;gap:6px;align-items:flex-end;justify-content:center;min-height:54px}
+.dem-ex .de-icons.far-icons{opacity:.55}
+.dem-ex .de-text .de-word{font-family:'DM Serif Display',serif;font-size:22px}
+.near-ex .de-text .de-word{color:var(--near-accent)}
+.far-ex .de-text .de-word{color:var(--far-accent)}
+.dem-ex .de-text .de-sent{font-size:14px;color:var(--text);font-weight:500;margin-top:2px}
+.dem-ex .de-dist-chip{font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:.8px;margin-top:4px}
+.near-ex .de-dist-chip{background:var(--near-accent);color:#fff}
+.far-ex .de-dist-chip{background:var(--far-accent);color:#fff}
+
+.dem-table{width:100%;border-collapse:collapse;font-size:14px}
+.dem-table th{padding:8px 12px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);border-bottom:2px solid var(--border)}
+.dem-table td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:15px}
+.dem-table td strong{font-size:18px;font-family:'DM Serif Display',serif}
+.near-cell{background:var(--near-bg);color:var(--near-accent)}
+.far-cell{background:var(--far-bg);color:var(--far-accent)}
+
+/* vocabulary grid */
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.vocab-card{background:var(--cream);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px}
+.vocab-card .v-icon{width:44px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.vocab-card .v-word{font-weight:600;font-size:15px;margin-bottom:1px}
+.vocab-card .v-ipa{font-size:12px;color:var(--text-muted);margin-bottom:4px}
+
+/* ══════════ BLOCK 3 — CCQs ══════════ */
+.ccq-item{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.ccq-item:last-of-type{border-bottom:none}
+.ccq-q{font-weight:500;font-size:15px;margin-bottom:10px;color:var(--text)}
+.ccq-num{display:inline-block;width:26px;height:26px;background:var(--slate-green);color:#fff;border-radius:50%;font-size:12px;font-weight:700;text-align:center;line-height:26px;margin-right:8px;flex-shrink:0}
+.ccq-img{margin-bottom:10px;display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
+.ccq-img .ci-obj{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:var(--text-muted)}
+.ccq-img .ci-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;text-transform:uppercase;letter-spacing:.8px}
+.ci-badge.near{background:var(--near-bg);color:var(--near-accent);border:1px solid var(--near-accent)}
+.ci-badge.far{background:var(--far-bg);color:var(--far-accent);border:1px solid var(--far-accent)}
+.ccq-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.ccq-opt{padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px;text-align:left;transition:all .15s;color:var(--text)}
+.ccq-opt:hover:not(:disabled){border-color:var(--near-accent);background:var(--near-bg)}
+.ccq-opt.correct{background:var(--ok-bg);border-color:var(--ok-accent);color:var(--ok-accent);font-weight:600}
+.ccq-opt.wrong{background:var(--err-bg);border-color:var(--err-accent);color:var(--err-accent)}
+.ccq-opt:disabled{cursor:default}
+.ccq-feedback{font-size:13px;border-radius:8px;padding:10px 14px;margin-top:6px;display:none}
+.ccq-feedback.show{display:block}
+.ccq-feedback.ok{background:var(--ok-bg);color:#1a4a30}
+.ccq-feedback.err{background:var(--err-bg);color:#7a1a1a}
+
+/* ══════════ BLOCK 4 — ACTIVITIES ══════════ */
+.activity-section{margin-bottom:32px}
+.activity-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--slate-green-dark);margin-bottom:6px}
+.activity-desc{font-size:14px;color:var(--text-muted);margin-bottom:16px}
+
+/* Act A */
+.label-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.label-card{background:var(--cream);border:2px solid var(--border);border-radius:12px;padding:14px 12px;text-align:center;transition:border-color .2s}
+.label-card .lc-icon{width:56px;height:56px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center}
+.label-card select{width:100%;padding:6px 10px;border-radius:8px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:13px;background:var(--white);color:var(--text);cursor:pointer}
+.label-card.ok{border-color:var(--ok-accent);background:var(--ok-bg)}
+.label-card.err{border-color:var(--err-accent);background:var(--err-bg)}
+
+/* Act B */
+.singplur-list{margin-bottom:16px}
+.sp-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--cream);border-radius:12px;margin-bottom:10px;flex-wrap:wrap}
+.sp-icon{width:42px;height:42px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+/* Act B - multiple icons for count */
+.sp-icons{display:flex;gap:3px;align-items:flex-end;flex-shrink:0}
+.sp-count{font-family:'DM Serif Display',serif;font-size:22px;color:var(--slate-green);min-width:20px}
+.sp-template{font-size:14px;display:flex;align-items:center;gap:6px;flex:1;flex-wrap:wrap}
+.sp-input{padding:6px 12px;border-radius:8px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:14px;width:130px;background:var(--white);color:var(--text);transition:border-color .15s}
+.sp-input:focus{outline:none;border-color:var(--near-accent)}
+.sp-input.ok{background:var(--ok-bg);border-color:var(--ok-accent);color:var(--ok-accent)}
+.sp-input.err{background:var(--err-bg);border-color:var(--err-accent);color:var(--err-accent)}
+.word-bank{background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:10px;padding:12px 16px;font-size:13px;margin-bottom:14px}
+.word-bank strong{display:block;margin-bottom:6px;color:#7a5a00;font-size:12px;letter-spacing:.8px;text-transform:uppercase}
+.word-bank span{display:inline-block;margin:3px;padding:3px 10px;background:var(--white);border-radius:100px;border:1px solid var(--warn-border);font-family:monospace;font-size:13px;color:#5a3e00}
+
+/* Act C */
+.nearfar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:16px}
+.nf-card{background:var(--white);border:2px solid var(--border);border-radius:14px;padding:16px;transition:border-color .2s}
+.nf-card-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.nf-scene{width:100%;height:70px;border-radius:10px;display:flex;align-items:flex-end;padding-bottom:6px;gap:6px;margin-bottom:12px}
+.nf-scene.near-scene{background:var(--near-bg);justify-content:flex-start;padding-left:12px}
+.nf-scene.far-scene{background:var(--far-bg);justify-content:flex-end;padding-right:12px}
+.nf-scene .obj-wrapper{display:flex;flex-direction:column;align-items:center}
+.nf-scene .obj-near-s{width:36px;height:36px}
+.nf-scene .obj-far-s{width:22px;height:22px;opacity:.6}
+.nf-label{font-size:14px;font-weight:600;flex:1}
+.nf-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;white-space:nowrap}
+.nf-badge.near{background:var(--near-bg);color:var(--near-accent);border:1px solid var(--near-accent)}
+.nf-badge.far{background:var(--far-bg);color:var(--far-accent);border:1px solid var(--far-accent)}
+.nf-buttons{display:flex;gap:8px;flex-wrap:wrap}
+.nf-btn{padding:7px 14px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;color:var(--text)}
+.nf-btn:hover:not(:disabled){border-color:var(--near-accent);background:var(--near-bg)}
+.nf-btn:disabled{cursor:default}
+.nf-btn.selected{border-color:var(--near-accent);background:var(--near-bg);color:var(--near-accent)}
+.nf-btn.correct-show{background:var(--ok-bg);border-color:var(--ok-accent);color:var(--ok-accent);font-weight:700}
+.nf-btn.wrong-show{background:var(--err-bg);border-color:var(--err-accent);color:var(--err-accent)}
+
+/* ══════════ BLOCK 5 — QUIZ ══════════ */
+.quiz-item{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.quiz-item:last-of-type{border-bottom:none}
+.quiz-q{font-size:15px;font-weight:500;margin-bottom:10px}
+.quiz-img-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;align-items:flex-end}
+.quiz-img-opt{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:var(--text-muted)}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.quiz-opt{padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px;text-align:left;transition:all .15s;color:var(--text)}
+.quiz-opt:hover{border-color:var(--near-accent);background:var(--near-bg)}
+.quiz-opt.selected{border-color:var(--slate-green);background:#e8f0e8;font-weight:600}
+.quiz-opt.correct{background:var(--ok-bg);border-color:var(--ok-accent);color:var(--ok-accent);font-weight:600}
+.quiz-opt.wrong{background:var(--err-bg);border-color:var(--err-accent);color:var(--err-accent)}
+
+/* Score */
+#score-panel{display:none;animation:fadeUp .3s ease}
+.score-circle{width:110px;height:110px;border-radius:50%;background:var(--slate-green);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px}
+.score-circle .score-num{font-family:'DM Serif Display',serif;font-size:38px;line-height:1}
+.score-circle .score-denom{font-size:13px;opacity:.75}
+.score-msg{text-align:center;margin-bottom:20px}
+.score-msg h3{font-family:'DM Serif Display',serif;font-size:22px;color:var(--slate-green-dark);margin-bottom:6px}
+.score-msg p{font-size:14px;color:var(--text-muted)}
+.score-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+.review-list{display:none}
+.review-list.show{display:block}
+.review-item{padding:12px 14px;border-radius:10px;margin-bottom:10px;font-size:14px}
+.review-item.ok{background:var(--ok-bg);border:1px solid var(--ok-accent)}
+.review-item.err{background:var(--err-bg);border:1px solid var(--err-accent)}
+.review-item .ri-q{font-weight:500;margin-bottom:4px}
+.review-item .ri-yours{color:var(--err-accent)}
+.review-item .ri-correct{color:var(--ok-accent);font-weight:600}
+
+/* Quiz images with near/far context */
+.quiz-img-context{margin-bottom:14px;border-radius:12px;overflow:hidden;border:1.5px solid var(--border)}
+.qi-near-band{background:var(--near-bg);padding:12px 16px;display:flex;align-items:flex-end;gap:8px;min-height:70px}
+.qi-far-band{background:var(--far-bg);padding:12px 16px;display:flex;align-items:flex-end;gap:8px;justify-content:flex-end;min-height:70px}
+
+@media(max-width:600px){
+  .sent-cards-grid,.dem-grid,.rule-cards,.ccq-options,.quiz-opts,.rule-examples-strip{grid-template-columns:1fr}
+  .distance-diagram{flex-direction:column}
+  .dist-person{width:100%;height:44px}
+  .nearfar-grid{grid-template-columns:1fr}
+  .disc-sentence-list{gap:12px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+/* keyboard focus visibility */
+.disc-sent-row:focus-visible,.ccq-opt:focus-visible,.quiz-opt:focus-visible,.nf-btn:focus-visible,.btn:focus-visible,.audio-btn:focus-visible,.tab-btn:focus-visible{outline:3px solid var(--near-accent);outline-offset:2px}
+/* clickable progress steps (visited blocks) */
+.prog-step.clickable{cursor:pointer}
+.prog-step.clickable:hover .dot{transform:scale(1.08);transition:transform .15s}
+.prog-step.clickable:hover{color:#fff}
+/* back / secondary nav button */
+.block-nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn-back{background:transparent;color:var(--slate-green);border:1.5px solid var(--slate-green);}
+.btn-back:hover{background:var(--slate-green);color:#fff}
+/* Activity D — free production */
+.prod-wrap{margin-top:6px}
+.prod-grid{display:grid;gap:12px;margin:14px 0}
+.prod-line{display:flex;gap:10px;align-items:center;background:var(--cream);border:1px solid var(--cream-dark);border-radius:12px;padding:10px 12px}
+.prod-num{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--slate-green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600}
+.prod-line input{flex:1;border:none;background:transparent;font-family:inherit;font-size:15px;color:var(--text);padding:6px 4px;border-bottom:2px solid var(--border)}
+.prod-line input:focus{outline:none;border-bottom-color:var(--near-accent)}
+.prod-check{background:var(--ok-bg);border:1px solid #bfe3cf;border-radius:12px;padding:14px 16px;margin-top:8px}
+.prod-check h4{color:var(--ok-accent);font-size:14px;margin-bottom:8px}
+.prod-check label{display:flex;gap:8px;align-items:flex-start;font-size:14px;color:#1e4d34;margin-bottom:6px;cursor:pointer}
+.prod-check input[type=checkbox]{margin-top:3px;width:16px;height:16px;flex-shrink:0;accent-color:var(--ok-accent)}
+.prod-starter{font-size:13px;color:var(--text-muted);background:#f0f4ff;border:1px solid #d4def5;border-radius:10px;padding:10px 12px;margin-bottom:4px}
+.prod-starter strong{color:#2a4a8a}
+/* ── depth scene: visual near/far without text ── */
+.dscene{display:flex;align-items:center;gap:8px;background:linear-gradient(180deg,#eef3f8 0%,#e2eaf2 100%);border:1px solid #dbe3ec;border-radius:12px;padding:8px 12px;min-height:64px;overflow:hidden}
+.dscene .eye{flex-shrink:0;align-self:flex-end;display:flex;align-items:flex-end}
+.dscene .gap{flex:0 0 14px;align-self:center;height:0;border-top:3px solid #9fb3c8;border-radius:2px;margin:0 2px}
+.dscene.far .gap{flex:1 1 auto;border-top:3px dashed #b9c4d2}
+.dscene .objs{flex-shrink:0;display:flex;gap:5px;align-items:flex-end}
+.dscene.far .objs{opacity:0.5;filter:saturate(0.7)}
+.quiz-img-context2{margin-bottom:14px;max-width:440px}
+.quiz-img-row .dscene{margin:0}
+/* ── colour hints for inductive Block 1 (no explanation, colour only) ── */
+.disc-sent-row2{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow)}
+.disc-english2{font-size:18px;font-weight:500;letter-spacing:0.2px;line-height:1.5}
+.disc-gloss{font-size:13px;color:var(--text-muted)}
+.hl-near{color:var(--near-accent);font-weight:700}
+.hl-far{color:var(--far-accent);font-weight:700}
+.hl-verb{color:#7a3ea8;font-weight:700}
+.hl-art{color:#1d8a58;font-weight:600}
+.hl-plural{background:#fff3cc;border-radius:4px;padding:0 2px;box-shadow:inset 0 -3px 0 #f0c000}
+.b1-legend{font-size:12.5px;color:var(--text-muted);display:flex;align-items:center;gap:8px;margin-bottom:14px;background:#f5f7fa;border:1px solid #e6eaef;border-radius:10px;padding:9px 12px}
+/* ── cover + intro screens ── */
+.screen{max-width:760px;margin:0 auto;padding:40px 22px}
+.cover-hero{background:linear-gradient(140deg,var(--slate-green) 0%,var(--slate-green-dark) 100%);color:#fff;border-radius:24px;padding:46px 30px;text-align:center;box-shadow:0 12px 44px rgba(30,61,26,0.28)}
+.cover-hero .uni{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.68);margin-bottom:18px}
+.cover-hero h1{font-family:'DM Serif Display',serif;font-size:clamp(30px,7vw,48px);line-height:1.1;font-weight:400;margin-bottom:10px}
+.cover-hero .tagline{font-size:15.5px;color:rgba(255,255,255,0.82);font-weight:300}
+.cover-hero .meta{font-size:13px;color:rgba(255,255,255,0.6);margin-top:18px}
+.cover-visual{display:flex;justify-content:center;gap:12px;margin:28px 0 8px;flex-wrap:wrap}
+.cover-visual > div{background:rgba(255,255,255,0.13);border-radius:14px;padding:12px;display:flex}
+.intro-card{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:28px 26px;box-shadow:var(--shadow)}
+.intro-card h2{font-family:'DM Serif Display',serif;font-weight:400;font-size:26px;color:var(--slate-green-dark);margin-bottom:6px}
+.intro-lead{color:var(--text-muted);margin-bottom:16px}
+.intro-obj{list-style:none;display:grid;gap:10px;margin:14px 0 20px}
+.intro-obj li{display:flex;gap:12px;align-items:flex-start;background:var(--cream);border-radius:12px;padding:12px 14px;font-size:15px}
+.intro-obj .ic{flex-shrink:0;width:30px;height:30px;border-radius:8px;background:var(--slate-green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.intro-how{background:#eef3f8;border:1px solid #dbe3ec;border-radius:12px;padding:14px 16px;font-size:14px;color:#33455c;margin-bottom:22px;line-height:1.55}
+.center{text-align:center;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.mt{margin-top:20px}
+/* ── license ── */
+.license-card{background:var(--cream);border:1px solid var(--cream-dark);border-radius:16px;padding:26px 24px;margin-top:22px;text-align:center}
+.license-card h3{font-size:16px;color:var(--slate-green-dark);margin-bottom:6px}
+.cc-badges{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:14px 0}
+.cc-chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);border-radius:100px;padding:6px 14px;font-size:13px;font-weight:600;color:var(--text)}
+.cc-text{font-size:13px;color:var(--text-muted);max-width:540px;margin:0 auto;line-height:1.55}
+.license-card a{color:var(--near-accent);text-decoration:none;font-weight:600}
+</style>
+</head>
+<body>
+
+<!-- ══════════ PORTADA ══════════ -->
+<section id="cover" class="screen">
+  <div class="cover-hero">
+    <div class="uni">Universidad del Magdalena · Programa CREO · English Start A0</div>
+    <h1>The Classroom</h1>
+    <div class="tagline">Objetos del salón · Singular &amp; Plural · This / That / These / Those</div>
+    <div class="cover-visual" id="cover-visual"></div>
+    <div class="meta">Unidad 2 · Sesión 8 · Objeto Virtual de Aprendizaje (OVA)</div>
+    <button class="btn mt" onclick="enterIntro()" style="background:#fff;color:var(--slate-green-dark);font-weight:700">Comenzar →</button>
+  </div>
+</section>
+
+<!-- ══════════ INTRODUCCIÓN ══════════ -->
+<section id="intro" class="screen" style="display:none">
+  <div class="intro-card">
+    <h2>Antes de empezar</h2>
+    <p class="intro-lead">En esta sesión aprenderás a nombrar los objetos del salón de clases y a señalarlos según estén cerca o lejos de ti, usando el singular y el plural.</p>
+    <ul class="intro-obj">
+      <li><span class="ic">1</span><div>Reconocer y pronunciar <strong>objetos del salón</strong> (desk, chair, board, pen…).</div></li>
+      <li><span class="ic">2</span><div>Formar el <strong>plural</strong> de los sustantivos (-s / -es) y usar <em lang="en">is / are</em>.</div></li>
+      <li><span class="ic">3</span><div>Usar los <strong>demostrativos</strong> <em lang="en">this / that / these / those</em> según la distancia.</div></li>
+      <li><span class="ic">4</span><div>Describir en tus propias oraciones los objetos reales a tu alrededor.</div></li>
+    </ul>
+    <div class="intro-how">
+      <strong>¿Cómo se usa?</strong> Avanza con los botones <em>Continuar</em> y repasa con <em>Volver</em>. La barra superior muestra tu progreso: toca un paso ya visitado para regresar. En las escenas, la figura 👤 representa a la <strong>persona que habla</strong>; fíjate en qué tan cerca o lejos está cada objeto de ella.
+    </div>
+    <div class="center">
+      <button class="btn btn-back" onclick="backToCover()">← Portada</button>
+      <button class="btn btn-primary" onclick="enterLesson()">Empezar la lección →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ LECCIÓN ══════════ -->
+<div id="lesson" style="display:none">
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar">
+  <div class="prog-step active" id="ps-1"><div class="dot">1</div> Descubrir</div>
+  <div class="prog-connector" id="pc-1"></div>
+  <div class="prog-step" id="ps-2"><div class="dot">2</div> Explicación</div>
+  <div class="prog-connector" id="pc-2"></div>
+  <div class="prog-step" id="ps-3"><div class="dot">3</div> Verificación</div>
+  <div class="prog-connector" id="pc-3"></div>
+  <div class="prog-step" id="ps-4"><div class="dot">4</div> Práctica</div>
+  <div class="prog-connector" id="pc-4"></div>
+  <div class="prog-step" id="ps-5"><div class="dot">5</div> Evaluación</div>
+</div>
+
+<header>
+  <div class="course-label">English Start A0 · Sesión 8 · Universidad del Magdalena</div>
+  <h1>Unit 2 · The Classroom</h1>
+  <div class="sub">Singular &amp; Plural · Demostrativos · Objetos del salón de clases</div>
+</header>
+
+<main>
+
+<!-- ══════════════════════════════════════════════════
+     BLOQUE 1: INDUCCIÓN / DESCUBRIR
+══════════════════════════════════════════════════ -->
+<div class="block active" id="block-1">
+  <div class="block-header">
+    <div class="block-pill pill-1">Bloque 1 · Descubrir el patrón</div>
+    <h2 class="block-title">¿Qué observas?</h2>
+    <p class="block-desc">Observa las oraciones, los <strong>colores</strong> y las escenas. Tu tarea es <strong>descubrir los patrones por ti mismo</strong> y anotarlos abajo. (Las reglas las confirmarás en el Bloque dos.)</p>
+  </div>
+
+  <div class="card">
+    <div class="b1-legend">👤 = la persona que habla. Fíjate en <strong>dónde</strong> está cada objeto respecto a ella y en el <strong>color</strong> de las palabras resaltadas.</div>
+    <div class="tab-switcher">
+      <button class="tab-btn active" onclick="switchTab('singular')">Singular → Plural</button>
+      <button class="tab-btn" onclick="switchTab('demonstratives')">This / That / These / Those</button>
+    </div>
+
+    <!-- TAB: SINGULAR/PLURAL -->
+    <div id="tab-singular">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px">Observa las oraciones y los colores. ¿Qué le pasa al objeto (al sustantivo) cuando hay más de uno? ¿Y al verbo?</p>
+      <div class="disc-sentence-list" id="disc-sp-list"></div>
+    </div>
+
+    <!-- TAB: DEMONSTRATIVES -->
+    <div id="tab-demonstratives" style="display:none">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px">Observa el <strong>color</strong> de la palabra resaltada y la <strong>posición</strong> del objeto en la escena. ¿Qué relación encuentras?</p>
+      <div class="disc-sentence-list" id="disc-dem-list"></div>
+    </div>
+
+    <div class="hyp-section">
+      <h4>✏️ Escribe tus hipótesis</h4>
+      <div class="hypothesis-group">
+        <label>Hipótesis uno: ¿Qué cambia en el sustantivo (objeto) cuando hay más de uno?</label>
+        <textarea id="hyp1" placeholder="Escribe tu idea aquí..."></textarea>
+      </div>
+      <div class="hypothesis-group">
+        <label>Hipótesis dos: ¿Cuándo usamos <em>this</em> y cuándo <em>that</em>? ¿Cuál es la diferencia?</label>
+        <textarea id="hyp2" placeholder="Escribe tu idea aquí..."></textarea>
+      </div>
+      <div class="hypothesis-group">
+        <label>Hipótesis tres: ¿Qué relación hay entre <em>these / those</em> y <em>this / that</em>?</label>
+        <textarea id="hyp3" placeholder="Escribe tu idea aquí..."></textarea>
+      </div>
+      <p style="margin-top:14px;font-size:13px;color:var(--text-muted)">Cuando termines, continúa al Bloque dos y compara tus hipótesis con las reglas. 👍</p>
+    </div>
+  </div>
+
+  <div class="block-nav">
+    <button class="btn btn-primary" onclick="goTo(2)">Continuar a Explicación →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     BLOQUE 2: EXPLICACIÓN
+══════════════════════════════════════════════════ -->
+<div class="block" id="block-2">
+  <div class="block-header">
+    <div class="block-pill pill-2">Bloque dos · Las reglas del escenario</div>
+    <h2 class="block-title">Gramática y Vocabulario</h2>
+    <p class="block-desc">Estudia los patrones confirmados en el Bloque uno. Tres sub-secciones a continuación.</p>
+  </div>
+
+  <!-- 2A -->
+  <div class="card">
+    <div class="sub-section">
+      <h3>2A — Singular → Plural</h3>
+      <div class="rule-cards">
+        <div class="rule-card rc-base">
+          <div class="rc-label">Regla base</div>
+          <div class="rc-rule">sustantivo + <code>-s</code></div>
+          <div class="rc-ex">desk → desks<br>pen → pens<br>ruler → rulers</div>
+        </div>
+        <div class="rule-card rc-es">
+          <div class="rc-label">Terminaciones -ch / -sh / -x / -s</div>
+          <div class="rc-rule">sustantivo + <code>-es</code></div>
+          <div class="rc-ex">watch → watches<br>(eraser → erasers ✓)</div>
+        </div>
+        <div class="rule-card rc-verb">
+          <div class="rc-label">El verbo</div>
+          <div class="rc-rule"><code>is</code> → <code>are</code></div>
+          <div class="rc-ex">This <strong>is</strong> a pen.<br>These <strong>are</strong> pens.</div>
+        </div>
+        <div class="rule-card rc-art">
+          <div class="rc-label">Artículo a / an</div>
+          <div class="rc-rule">Solo con singular</div>
+          <div class="rc-ex">This is <strong>a</strong> desk.<br>These are desks. <em>(sin artículo)</em></div>
+        </div>
+      </div>
+
+      <!-- Visual examples strip -->
+      <div class="rule-examples-strip" id="rule-ex-strip"></div>
+
+      <!-- a vs an explainer -->
+      <div style="background:#f0f4ff;border:1.5px solid #b0c4ee;border-radius:12px;padding:16px;margin-bottom:14px">
+        <div style="font-weight:700;color:#2a4a8a;margin-bottom:8px;font-size:14px">📌 <em>a</em> vs <em>an</em> — ¿cuándo usar cada uno?</div>
+        <p style="font-size:14px;color:#2a3a5a;margin-bottom:10px">Usamos <strong>an</strong> cuando la palabra que viene después empieza con un <strong>sonido vocálico</strong>; en los demás casos usamos <strong>a</strong>. Como guía práctica en este nivel, casi siempre coincide con las letras vocales (<strong>a, e, i, o, u</strong>).</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:14px">
+          <div style="background:#fff;border-radius:8px;padding:10px;border:1px solid #b0c4ee">
+            <div style="font-weight:700;color:#2a4a8a;margin-bottom:4px">Usa <em>«a»</em></div>
+            This is <strong>a</strong> desk<br>
+            This is <strong>a</strong> pen<br>
+            This is <strong>a</strong> chair
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:10px;border:1px solid #90c4ee">
+            <div style="font-weight:700;color:#1a5a8a;margin-bottom:4px">Usa <em>«an»</em></div>
+            This is <strong>an</strong> eraser<br>
+            <span style="color:var(--text-muted);font-size:12px">⟶ empieza con <strong>e</strong> (vocal)</span>
+          </div>
+        </div>
+        <div style="background:#fff8e6;border:1px solid #f0d08a;border-radius:8px;padding:10px;margin-top:10px;font-size:13px;color:#5a3e00">
+          <strong>⚠ Excepción importante:</strong> Algunas palabras empiezan con la letra <em>u</em> pero suenan como si empezaran con «y» (en español). En esos casos se usa <strong>a</strong>, no <em>an</em>.<br>
+          <span style="margin-top:4px;display:block">Ejemplos: <strong>a uniform</strong>, <strong>a university</strong> — la <em>u</em> suena como «yu», no como vocal pura.</span>
+          <span style="display:block;margin-top:4px;color:#888">En este nivel, el único objeto que requiere <em>an</em> es <strong>eraser</strong>. ¡Tenlo presente!</span>
+        </div>
+      </div>
+
+      <div class="warn-box">
+        <div class="warn-title">⚠ Error frecuente — Interferencia del español</div>
+        <p>En español el pronombre sujeto puede omitirse. En inglés es <strong>obligatorio</strong>.</p>
+        <p style="margin-top:6px"><span class="wrong">✗ "Is a pen."</span></p>
+        <p><span class="right">✓ "This is a pen."</span> &nbsp;/&nbsp; <span class="right">✓ "That is a pen."</span></p>
+        <p style="font-size:13px;margin-top:6px;color:#7a5a00">Todo enunciado en inglés debe tener un sujeto explícito. Nunca se omite.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2B -->
+  <div class="card">
+    <div class="sub-section">
+      <h3>2B — This / That / These / Those</h3>
+      <div class="distance-diagram">
+        <div class="dist-near">
+          <h4>Cerca (Near)</h4>
+          <div class="dist-word">This</div><div class="dist-sub">singular</div>
+          <div style="margin:10px 0;border-top:1px solid #b8d4ee"></div>
+          <div class="dist-word">These</div><div class="dist-sub">plural</div>
+        </div>
+        <div class="dist-person">
+          <svg viewBox="0 0 40 80" width="36" height="72" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="10" r="9" fill="#888"/>
+            <rect x="12" y="21" width="16" height="28" rx="4" fill="#666"/>
+            <rect x="6" y="22" width="8" height="22" rx="3" fill="#666"/>
+            <rect x="26" y="22" width="8" height="22" rx="3" fill="#666"/>
+            <rect x="13" y="48" width="7" height="22" rx="3" fill="#666"/>
+            <rect x="21" y="48" width="7" height="22" rx="3" fill="#666"/>
+          </svg>
+        </div>
+        <div class="dist-far">
+          <h4>Lejos (Far)</h4>
+          <div class="dist-word">That</div><div class="dist-sub">singular</div>
+          <div style="margin:10px 0;border-top:1px solid #e8d4a0"></div>
+          <div class="dist-word">Those</div><div class="dist-sub">plural</div>
+        </div>
+      </div>
+
+      <!-- dem examples with images — larger, more visual -->
+      <div class="dem-grid" id="dem-grid-2b"></div>
+
+      <table class="dem-table">
+        <thead><tr><th></th><th>Cerca (near)</th><th>Lejos (far)</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Singular</strong></td>
+            <td class="near-cell"><strong>This</strong> is a desk.</td>
+            <td class="far-cell"><strong>That</strong> is a chair.</td>
+          </tr>
+          <tr>
+            <td><strong>Plural</strong></td>
+            <td class="near-cell"><strong>These</strong> are desks.</td>
+            <td class="far-cell"><strong>Those</strong> are chairs.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 2C vocabulary -->
+  <div class="card">
+    <div class="sub-section">
+      <h3>2C — Objetos del salón de clases</h3>
+      <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px">Haz clic en 🔊 para escuchar la pronunciación de cada palabra.</p>
+      <div class="vocab-grid" id="vocab-grid"></div>
+    </div>
+  </div>
+
+  <div class="block-nav">
+    <button class="btn btn-back" onclick="goTo(1)">← Volver</button>
+    <button class="btn btn-primary" onclick="goTo(3)">Continuar a Verificación →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     BLOQUE 3: CCQs
+══════════════════════════════════════════════════ -->
+<div class="block" id="block-3">
+  <div class="block-header">
+    <div class="block-pill pill-3">Bloque tres · Verificación conceptual</div>
+    <h2 class="block-title">Preguntas de comprensión</h2>
+    <p class="block-desc">Estas preguntas verifican tu comprensión <em>conceptual</em>, no la memorización. Responde todas para desbloquear la práctica.</p>
+  </div>
+  <div class="card" id="ccq-container"></div>
+  <div class="block-nav">
+    <button class="btn btn-back" onclick="goTo(2)">← Volver</button>
+    <button class="btn btn-primary" id="ccq-next" style="display:none" onclick="goTo(4)">Continuar a Práctica →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     BLOQUE 4: ACTIVIDADES
+══════════════════════════════════════════════════ -->
+<div class="block" id="block-4">
+  <div class="block-header">
+    <div class="block-pill pill-4">Bloque cuatro · Investigar el salón</div>
+    <h2 class="block-title">Actividades de práctica</h2>
+    <p class="block-desc">Tres actividades progresivas. Verifica cada una de forma independiente.</p>
+  </div>
+
+  <!-- Act A -->
+  <div class="card activity-section">
+    <div class="activity-title">Actividad A — Identifica el objeto</div>
+    <div class="activity-desc">Selecciona el nombre correcto para cada objeto del salón.</div>
+    <div class="label-grid" id="label-grid"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-verify" onclick="verifyA()">✓ Verificar</button>
+      <button class="btn btn-retry" onclick="resetA()">↺ Reintentar</button>
+    </div>
+    <div id="a-feedback" style="margin-top:12px;font-size:14px"></div>
+  </div>
+
+  <!-- Act B -->
+  <div class="card activity-section">
+    <div class="activity-title">Actividad B — ¿Singular o plural?</div>
+    <div class="activity-desc">Completa cada oración usando el banco de palabras.</div>
+    <div class="word-bank">
+      <strong>Banco de palabras</strong>
+      <span>board</span><span>boards</span><span>pencil</span><span>pencils</span>
+      <span>eraser</span><span>erasers</span><span>notebook</span><span>notebooks</span>
+      <span>scissors</span><span>sharpener</span><span>sharpeners</span>
+    </div>
+    <div class="singplur-list" id="singplur-list"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-verify" onclick="verifyB()">✓ Verificar</button>
+      <button class="btn btn-retry" onclick="resetB()">↺ Reintentar</button>
+    </div>
+    <div id="b-feedback" style="margin-top:12px;font-size:14px"></div>
+  </div>
+
+  <!-- Act C -->
+  <div class="card activity-section">
+    <div class="activity-title">Actividad C — ¿Cerca o lejos?</div>
+    <div class="activity-desc">Elige el demostrativo correcto observando la escena: ¿el objeto está cerca o lejos de la persona? ¿es uno o varios?</div>
+    <div class="nearfar-grid" id="nearfar-list"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-verify" onclick="verifyC()">✓ Verificar</button>
+      <button class="btn btn-retry" onclick="resetC()">↺ Reintentar</button>
+    </div>
+    <div id="c-feedback" style="margin-top:12px;font-size:14px"></div>
+  </div>
+
+  <!-- Act D — free production / personalization (TBLT output) -->
+  <div class="card activity-section">
+    <div class="activity-title">Actividad D — Tu salón (producción libre)</div>
+    <div class="activity-desc">Mira a tu alrededor ahora mismo. Escribe <strong>tres oraciones originales</strong> sobre objetos reales que tienes cerca y lejos. Usa <em>this / that / these / those</em>.</div>
+    <div class="prod-starter">
+      Modelo: <strong lang="en">This is a pencil. That is a window. These are books.</strong>
+    </div>
+    <div class="prod-wrap">
+      <div class="prod-grid">
+        <div class="prod-line"><span class="prod-num">1</span><input type="text" id="prod-1" lang="en" placeholder="This is a..." aria-label="Oración 1"/></div>
+        <div class="prod-line"><span class="prod-num">2</span><input type="text" id="prod-2" lang="en" placeholder="That is a..." aria-label="Oración 2"/></div>
+        <div class="prod-line"><span class="prod-num">3</span><input type="text" id="prod-3" lang="en" placeholder="These are / Those are..." aria-label="Oración 3"/></div>
+      </div>
+      <div class="prod-check">
+        <h4>✓ Revisa tú mismo antes de compartir</h4>
+        <label><input type="checkbox"/> Cada oración tiene un <strong>sujeto</strong> explícito (this / that / these / those).</label>
+        <label><input type="checkbox"/> Elegí bien la <strong>distancia</strong>: this/these para cerca, that/those para lejos.</label>
+        <label><input type="checkbox"/> Concuerda el <strong>verbo</strong>: is para singular, are para plural.</label>
+        <label><input type="checkbox"/> Usé <strong>a / an</strong> solo con singular (an antes de sonido vocálico, p. ej. an eraser).</label>
+        <label><input type="checkbox"/> Añadí <strong>-s / -es</strong> al sustantivo cuando es plural.</label>
+      </div>
+      <p style="font-size:13px;color:var(--text-muted);margin-top:10px">💬 Esta actividad no se califica automáticamente: es tu producción personal. Comparte tus oraciones en el <strong>Foro</strong> del curso.</p>
+    </div>
+  </div>
+
+  <div class="block-nav">
+    <button class="btn btn-back" onclick="goTo(3)">← Volver</button>
+    <button class="btn btn-primary" onclick="goTo(5)">Continuar a Evaluación →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     BLOQUE 5: EVALUACIÓN
+══════════════════════════════════════════════════ -->
+<div class="block" id="block-5">
+  <div class="block-header">
+    <div class="block-pill pill-5">Bloque cinco · Evaluación final</div>
+    <h2 class="block-title">Informe final</h2>
+    <p class="block-desc">Diez preguntas de selección múltiple. Selecciona una respuesta por pregunta y luego envía.</p>
+  </div>
+  <div class="card" id="quiz-container"></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px" id="quiz-actions">
+    <button class="btn btn-primary" onclick="submitQuiz()">Enviar evaluación</button>
+  </div>
+  <div class="card" id="score-panel" style="margin-top:20px">
+    <div class="score-circle">
+      <div class="score-num" id="score-num">0</div>
+      <div class="score-denom">/10</div>
+    </div>
+    <div class="score-msg">
+      <h3 id="score-title"></h3>
+      <p id="score-text"></p>
+    </div>
+    <div class="score-actions">
+      <button class="btn btn-retry" onclick="retryQuiz()">↺ Reintentar</button>
+      <button class="btn btn-secondary" onclick="toggleReview()">📋 Revisión detallada</button>
+    </div>
+    <div class="review-list" id="review-list"></div>
+  </div>
+
+  <!-- ══════════ LICENCIA (última página) ══════════ -->
+  <div class="license-card">
+    <h3>Licencia</h3>
+    <div class="cc-badges">
+      <span class="cc-chip">CC</span>
+      <span class="cc-chip">BY · Atribución</span>
+      <span class="cc-chip">NC · No Comercial</span>
+      <span class="cc-chip">SA · Compartir Igual</span>
+    </div>
+    <p class="cc-text">Este Objeto Virtual de Aprendizaje se distribuye bajo licencia <strong>Creative Commons Atribución–NoComercial–CompartirIgual 4.0 Internacional (CC&nbsp;BY-NC-SA&nbsp;4.0)</strong>. Puedes compartir y adaptar el material citando la autoría, sin fines comerciales, y distribuyendo tus versiones bajo esta misma licencia.<br>
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="noopener">creativecommons.org/licenses/by-nc-sa/4.0</a></p>
+  </div>
+</div>
+
+</main>
+
+</div><!-- /#lesson -->
+
+<script>
+/* ═══════════════════════════ SVG LIBRARY ═══════════════════════════ */
+const SVGS = {
+desk:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+  <rect x="4" y="18" width="48" height="10" rx="2" fill="#8B5E3C"/>
+  <rect x="8" y="18" width="40" height="8" rx="1" fill="#A0704A"/>
+  <rect x="6" y="28" width="5" height="22" rx="2" fill="#7a5030"/>
+  <rect x="45" y="28" width="5" height="22" rx="2" fill="#7a5030"/>
+  <rect x="12" y="28" width="5" height="18" rx="2" fill="#7a5030"/>
+  <rect x="39" y="28" width="5" height="18" rx="2" fill="#7a5030"/>
+</svg>`,
+chair:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="4" width="36" height="6" rx="3" fill="#1a6bbb"/>
+  <rect x="10" y="10" width="36" height="18" rx="3" fill="#2a80d0"/>
+  <rect x="10" y="28" width="36" height="8" rx="2" fill="#1a6bbb"/>
+  <rect x="10" y="36" width="5" height="16" rx="2" fill="#155299"/>
+  <rect x="41" y="36" width="5" height="16" rx="2" fill="#155299"/>
+  <rect x="15" y="36" width="5" height="12" rx="2" fill="#155299"/>
+  <rect x="36" y="36" width="5" height="12" rx="2" fill="#155299"/>
+</svg>`,
+board:`<svg viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">
+  <rect x="2" y="2" width="76" height="46" rx="4" fill="#1e3d1a"/>
+  <rect x="5" y="5" width="70" height="40" rx="3" fill="#2d5a27"/>
+  <rect x="28" y="49" width="24" height="6" rx="2" fill="#555"/>
+  <rect x="34" y="54" width="12" height="4" rx="1" fill="#777"/>
+  <line x1="10" y1="18" x2="50" y2="18" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="10" y1="27" x2="40" y2="27" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="10" y1="36" x2="30" y2="36" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round"/>
+  <rect x="55" y="10" width="14" height="30" rx="3" fill="#1a4a16" opacity="0.7"/>
+  <text x="62" y="30" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.5)" font-family="sans-serif">📌</text>
+</svg>`,
+window:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+  <rect x="4" y="4" width="48" height="48" rx="3" fill="#7a9aaa"/>
+  <rect x="7" y="7" width="42" height="42" rx="2" fill="#b8d8e8"/>
+  <rect x="26" y="7" width="3" height="42" fill="#7a9aaa"/>
+  <rect x="7" y="26" width="42" height="3" fill="#7a9aaa"/>
+  <rect x="8" y="8" width="17" height="17" rx="1" fill="#ddeef8" opacity="0.7"/>
+  <rect x="31" y="8" width="17" height="17" rx="1" fill="#cce8f5" opacity="0.7"/>
+  <rect x="8" y="30" width="17" height="17" rx="1" fill="#cce8f5" opacity="0.7"/>
+  <rect x="31" y="30" width="17" height="17" rx="1" fill="#ddeef8" opacity="0.7"/>
+</svg>`,
+door:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="4" width="40" height="52" rx="3" fill="#6a4020"/>
+  <rect x="11" y="7" width="34" height="46" rx="2" fill="#8B5E3C"/>
+  <rect x="13" y="9" width="30" height="20" rx="1" fill="#a07040" opacity="0.5"/>
+  <rect x="13" y="32" width="30" height="19" rx="1" fill="#a07040" opacity="0.5"/>
+  <circle cx="37" cy="30" r="3.5" fill="#c8a060"/>
+  <circle cx="37" cy="30" r="2" fill="#e8c080"/>
+</svg>`,
+pen:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+  <rect x="24" y="2" width="10" height="12" rx="3" fill="#1a4a8a"/>
+  <rect x="23" y="12" width="12" height="28" rx="2" fill="#2a80d0"/>
+  <rect x="23" y="36" width="12" height="5" rx="1" fill="#ddd"/>
+  <polygon points="23,41 33,41 28,53" fill="#1a4a8a"/>
+  <rect x="25" y="5" width="8" height="3" rx="1" fill="#0a2a5a"/>
+</svg>`,
+pencil:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+  <rect x="24" y="6" width="10" height="32" rx="2" fill="#f0c000"/>
+  <polygon points="24,38 34,38 29,50" fill="#f0c000"/>
+  <polygon points="25.5,42 32.5,42 29,48" fill="#d4a040"/>
+  <polygon points="27,46 31,46 29,50" fill="#333"/>
+  <rect x="24" y="4" width="10" height="5" rx="2" fill="#d4a000"/>
+  <rect x="24" y="1" width="10" height="5" rx="2" fill="#e8a0a0"/>
+  <rect x="24" y="0" width="10" height="4" rx="2" fill="#aaa"/>
+</svg>`,
+notebook:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+  <rect x="10" y="4" width="38" height="48" rx="4" fill="#c93030"/>
+  <rect x="14" y="7" width="30" height="42" rx="2" fill="#fff"/>
+  <rect x="7" y="8" width="5" height="4" rx="1" fill="#aaa"/>
+  <rect x="7" y="16" width="5" height="4" rx="1" fill="#aaa"/>
+  <rect x="7" y="24" width="5" height="4" rx="1" fill="#aaa"/>
+  <rect x="7" y="32" width="5" height="4" rx="1" fill="#aaa"/>
+  <rect x="7" y="40" width="5" height="4" rx="1" fill="#aaa"/>
+  <line x1="14" y1="18" x2="44" y2="18" stroke="#ddd" stroke-width="1"/>
+  <line x1="14" y1="24" x2="44" y2="24" stroke="#ddd" stroke-width="1"/>
+  <line x1="14" y1="30" x2="44" y2="30" stroke="#ddd" stroke-width="1"/>
+  <line x1="14" y1="36" x2="44" y2="36" stroke="#ddd" stroke-width="1"/>
+</svg>`,
+eraser:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+  <rect x="6" y="17" width="44" height="22" rx="5" fill="#e89aaa"/>
+  <rect x="6" y="30" width="44" height="9" rx="0 0 5 5" fill="#d07888"/>
+  <rect x="6" y="34" width="44" height="5" rx="0 0 5 5" fill="#c06070"/>
+  <line x1="6" y1="30" x2="50" y2="30" stroke="white" stroke-width="1" opacity="0.5"/>
+</svg>`,
+scissors:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="15" cy="42" r="8" fill="none" stroke="#555" stroke-width="3"/>
+  <circle cx="41" cy="42" r="8" fill="none" stroke="#555" stroke-width="3"/>
+  <circle cx="15" cy="42" r="4" fill="none" stroke="#555" stroke-width="2"/>
+  <circle cx="41" cy="42" r="4" fill="none" stroke="#555" stroke-width="2"/>
+  <line x1="19" y1="36" x2="30" y2="8" stroke="#777" stroke-width="4" stroke-linecap="round"/>
+  <line x1="37" y1="36" x2="26" y2="8" stroke="#777" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="28" cy="22" r="3.5" fill="#555"/>
+</svg>`,
+ruler:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+  <rect x="4" y="18" width="48" height="18" rx="3" fill="#e8c800"/>
+  <rect x="4" y="18" width="48" height="5" rx="2" fill="#c8a800"/>
+  <line x1="10" y1="23" x2="10" y2="32" stroke="#888" stroke-width="1.5"/>
+  <line x1="16" y1="23" x2="16" y2="29" stroke="#888" stroke-width="1"/>
+  <line x1="22" y1="23" x2="22" y2="32" stroke="#888" stroke-width="1.5"/>
+  <line x1="28" y1="23" x2="28" y2="29" stroke="#888" stroke-width="1"/>
+  <line x1="34" y1="23" x2="34" y2="32" stroke="#888" stroke-width="1.5"/>
+  <line x1="40" y1="23" x2="40" y2="29" stroke="#888" stroke-width="1"/>
+  <line x1="46" y1="23" x2="46" y2="32" stroke="#888" stroke-width="1.5"/>
+</svg>`,
+highlighter:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="2" width="16" height="8" rx="3" fill="#bbb"/>
+  <rect x="19" y="8" width="18" height="30" rx="3" fill="#ffe600"/>
+  <rect x="19" y="33" width="18" height="7" rx="2" fill="#ffcc00"/>
+  <polygon points="19,40 37,40 33,52 23,52" fill="#e6b800"/>
+  <rect x="19" y="38" width="18" height="4" fill="#e6b800"/>
+</svg>`,
+sharpener:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+  <!-- body -->
+  <rect x="10" y="14" width="36" height="28" rx="6" fill="#2d5a27"/>
+  <rect x="13" y="17" width="30" height="22" rx="5" fill="#3d7a35"/>
+  <!-- pencil hole opening (front-facing circle) -->
+  <ellipse cx="28" cy="28" rx="8" ry="7" fill="#1a3a15"/>
+  <ellipse cx="28" cy="28" rx="5.5" ry="4.5" fill="#222"/>
+  <!-- pencil going in horizontally -->
+  <rect x="38" y="25" width="16" height="6" rx="2" fill="#f0c000"/>
+  <polygon points="54,25 54,31 58,28" fill="#d4a040"/>
+  <polygon points="55,26 55,30 58,28" fill="#333"/>
+  <!-- brand dots -->
+  <circle cx="16" cy="23" r="2" fill="#1a3a15"/>
+  <circle cx="40" cy="23" r="2" fill="#1a3a15"/>
+  <!-- slot for shavings -->
+  <rect x="16" y="34" width="10" height="5" rx="2" fill="#1a3a15"/>
+</svg>`,
+observer:`<svg viewBox="0 0 30 46" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="15" cy="9" r="8" fill="#52606e"/>
+  <path d="M2 46 C2 27 28 27 28 46 Z" fill="#52606e"/>
+</svg>`
+};
+
+/* ═══════════════════════════ VOCABULARY ═══════════════════════════ */
+const VOCAB = [
+  {word:'desk',       ipa:'/dɛsk/',         key:'desk'},
+  {word:'chair',      ipa:'/tʃɛr/',         key:'chair'},
+  {word:'board',      ipa:'/bɔːrd/',        key:'board'},
+  {word:'window',     ipa:'/ˈwɪndoʊ/',     key:'window'},
+  {word:'door',       ipa:'/dɔːr/',         key:'door'},
+  {word:'pen',        ipa:'/pɛn/',          key:'pen'},
+  {word:'pencil',     ipa:'/ˈpɛnsəl/',     key:'pencil'},
+  {word:'notebook',   ipa:'/ˈnoʊtbʊk/',   key:'notebook'},
+  {word:'eraser',     ipa:'/ɪˈreɪsər/',   key:'eraser'},
+  {word:'scissors',   ipa:'/ˈsɪzərz/',    key:'scissors'},
+  {word:'ruler',      ipa:'/ˈruːlər/',     key:'ruler'},
+  {word:'highlighter',ipa:'/ˈhaɪlaɪtər/', key:'highlighter'},
+  {word:'sharpener',  ipa:'/ˈʃɑːrpənər/', key:'sharpener'},
+];
+
+function speak(word){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang='en-US'; u.rate=0.82;
+  window.speechSynthesis.speak(u);
+}
+function speakerIcon(){
+  return `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0013 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>`;
+}
+
+/* render vocab grid */
+(function(){
+  document.getElementById('vocab-grid').innerHTML = VOCAB.map(v=>`
+    <div class="vocab-card">
+      <div class="v-icon">${scaleSvg(SVGS[v.key],44)}</div>
+      <div>
+        <div class="v-word" lang="en">${v.word}</div>
+        <div class="v-ipa">${v.ipa}</div>
+        <button class="audio-btn" onclick="speak('${v.word}')" title="Escuchar pronunciación" aria-label="Escuchar la pronunciación de ${v.word}">${speakerIcon()}</button>
+      </div>
+    </div>`).join('');
+})();
+
+function scaleSvg(svgStr, size){
+  return svgStr
+    .replace(/viewBox="0 0 56 56"/, `viewBox="0 0 56 56" width="${size}" height="${size}"`)
+    .replace(/viewBox="0 0 80 60"/, `viewBox="0 0 80 60" width="${size}" height="${Math.round(size*60/80)}"`)
+    .replace(/viewBox="0 0 40 80"/, `viewBox="0 0 40 80" width="${Math.round(size/2)}" height="${size}"`)
+    .replace(/viewBox="0 0 30 46"/, `viewBox="0 0 30 46" width="${Math.round(size*30/46)}" height="${size}"`);
+}
+
+/* depthScene — represents near/far purely with visuals (observer + distance + size + fade), no text */
+function depthScene(key, count, near){
+  const n = count||1;
+  const sz = near ? (n>2?30:42) : (n>2?20:26);
+  let objs='';
+  for(let i=0;i<n;i++) objs += `<div style="width:${sz}px;height:${sz}px;display:flex;align-items:flex-end">${scaleSvg(SVGS[key],sz)}</div>`;
+  return `<div class="dscene ${near?'near':'far'}" role="img" aria-label="${near?'objeto cerca de la persona':'objeto lejos de la persona'}">
+    <div class="eye">${scaleSvg(SVGS.observer,42)}</div>
+    <div class="gap"></div>
+    <div class="objs">${objs}</div>
+  </div>`;
+}
+
+/* ═══════════ BLOCK 1 — DISCOVER interactive sentences ═══════════ */
+
+const SP_DATA = [
+  {near:true,  plural:false, dem:'This',  art:'a',  noun:'desk',     nounES:'escritorio',  key:'desk',     count:1, note:'Un escritorio — cerca'},
+  {near:true,  plural:true,  dem:'These', art:'',   noun:'desks',    nounES:'escritorios', key:'desk',     count:2, note:'Dos escritorios — cerca'},
+  {near:false, plural:false, dem:'That',  art:'a',  noun:'chair',    nounES:'silla',       key:'chair',    count:1, note:'Una silla — lejos'},
+  {near:false, plural:true,  dem:'Those', art:'',   noun:'chairs',   nounES:'sillas',      key:'chair',    count:3, note:'Tres sillas — lejos'},
+  {near:true,  plural:false, dem:'This',  art:'a',  noun:'pen',      nounES:'bolígrafo',   key:'pen',      count:1, note:'Un bolígrafo — cerca'},
+  {near:true,  plural:true,  dem:'These', art:'',   noun:'three red pens', nounES:'tres bolígrafos rojos', key:'pen', count:3, note:'Tres bolígrafos — cerca'},
+];
+
+const DEM_DATA = [
+  {near:true,  plural:false, dem:'This',  art:'a',  noun:'notebook', nounES:'cuaderno',    key:'notebook', count:1, note:'Un cuaderno — cerca'},
+  {near:false, plural:false, dem:'That',  art:'a',  noun:'board',    nounES:'tablero',     key:'board',    count:1, note:'Un tablero — lejos'},
+  {near:true,  plural:true,  dem:'These', art:'',   noun:'two pencils', nounES:'dos lápices', key:'pencil', count:2, note:'Dos lápices — cerca'},
+  {near:false, plural:true,  dem:'Those', art:'',   noun:'two windows', nounES:'dos ventanas', key:'window', count:2, note:'Dos ventanas — lejos'},
+];
+
+function makeDiscRow(s, idx, idPrefix){
+  const verb = s.plural ? 'are' : 'is';
+  const art = !s.plural ? (s.noun.match(/^[aeiou]/i) ? 'an' : 'a') : '';
+  const demCls = s.near ? 'hl-near' : 'hl-far';
+  // highlight the plural -s ending of the noun phrase (hint, not explanation)
+  let nounHTML = s.noun;
+  if(s.plural && /s$/i.test(s.noun)){
+    nounHTML = s.noun.slice(0,-1) + '<span class="hl-plural">' + s.noun.slice(-1) + '</span>';
+  }
+  const artHTML = art ? `<span class="hl-art">${art}</span> ` : '';
+  return `<div class="disc-sent-row2" id="${idPrefix}-${idx}">
+    ${depthScene(s.key, s.count, s.near)}
+    <div class="disc-english2" lang="en"><span class="${demCls}">${s.dem}</span> <span class="hl-verb">${verb}</span> ${artHTML}${nounHTML}.</div>
+    <div class="disc-gloss">${s.nounES}</div>
+  </div>`;
+}
+
+(function(){
+  document.getElementById('disc-sp-list').innerHTML = SP_DATA.map((s,i)=>makeDiscRow(s,i,'dsp')).join('');
+  document.getElementById('disc-dem-list').innerHTML = DEM_DATA.map((s,i)=>makeDiscRow(s,i,'ddem')).join('');
+})();
+
+function switchTab(tab){
+  document.getElementById('tab-singular').style.display = tab==='singular'?'block':'none';
+  document.getElementById('tab-demonstratives').style.display = tab==='demonstratives'?'block':'none';
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',
+    (i===0&&tab==='singular')||(i===1&&tab==='demonstratives')));
+}
+
+/* ═══════════ BLOCK 2A — visual examples strip ═══════════ */
+(function(){
+  const strip = [
+    {cls:'rex-singular', label:'Singular', sent:'<em>This</em> is a desk.', key:'desk', count:1},
+    {cls:'rex-plural',   label:'Plural',   sent:'<em>These</em> are desks.', key:'desk', count:2},
+  ];
+  document.getElementById('rule-ex-strip').innerHTML = strip.map(s=>{
+    let icons = '';
+    for(let i=0;i<s.count;i++) icons += `<div style="width:34px;height:34px">${scaleSvg(SVGS[s.key],34)}</div>`;
+    return `<div class="rex-card ${s.cls}">
+      <div class="rex-icons">${icons}</div>
+      <div>
+        <div class="rex-label">${s.label}</div>
+        <div class="rex-sent">${s.sent}</div>
+      </div>
+    </div>`;
+  }).join('');
+})();
+
+/* ═══════════ BLOCK 2B — dem examples with images ═══════════ */
+(function(){
+  const pairs = [
+    {near:true,  plural:false, dem:'This',  noun:'desk',   key:'desk',   sent:'This is a desk.',      count:1},
+    {near:true,  plural:true,  dem:'These', noun:'desks',  key:'desk',   sent:'These are desks.',     count:2},
+    {near:false, plural:false, dem:'That',  noun:'chair',  key:'chair',  sent:'That is a chair.',     count:1},
+    {near:false, plural:true,  dem:'Those', noun:'chairs', key:'chair',  sent:'Those are chairs.',    count:3},
+  ];
+  document.getElementById('dem-grid-2b').innerHTML = pairs.map(p=>{
+    const cls = p.near ? 'near-ex' : 'far-ex';
+    return `<div class="dem-ex ${cls}">
+      ${depthScene(p.key, p.count, p.near)}
+      <div class="de-text">
+        <div class="de-word" lang="en">${p.dem}</div>
+        <div class="de-sent" lang="en">${p.sent}</div>
+      </div>
+    </div>`;
+  }).join('');
+})();
+
+/* ═══════════ CCQs ═══════════ */
+const CCQs = [
+  {
+    q:'Alguien escribe: <em>"These is a pen."</em> ¿Es correcto?',
+    img:{objs:[{key:'pen',near:true,count:1}]},
+    opts:['Sí, está correcto.','No — "these" es plural; correcto: "These are pens."','No — debería ser "This are a pen."','No — debería ser "Those is a pen."'],
+    ans:1,
+    fb:['Incorrecto. "These" es demostrativo plural y exige el verbo "are", no "is". La oración correcta es "These are pens."',
+        'Correcto. "These" es siempre plural y siempre se usa con "are". Además, el sustantivo también debe ir en plural: "These are pens."',
+        'Incorrecto. "This are" también es incorrecto. La forma correcta es "These are pens."',
+        'Incorrecto. "Those is" tiene el mismo error de concordancia: los demostrativos plurales siempre usan "are".']
+  },
+  {
+    q:'La palabra <em>"desks"</em> — ¿a cuántos escritorios se refiere?',
+    img:{objs:[{key:'desk',near:true,count:3}]},
+    opts:['A exactamente uno','A más de uno','A ninguno','Depende del contexto'],
+    ans:1,
+    fb:['Incorrecto. "Desks" tiene la terminación plural -s, por lo tanto se refiere a más de uno.',
+        'Correcto. La terminación -s indica plural: más de un escritorio.',
+        'Incorrecto. La palabra se refiere a objetos físicos reales; no es "ninguno".',
+        'Incorrecto. El sufijo -s siempre señala pluralidad en sustantivos regulares del inglés.']
+  },
+  {
+    q:'¿Es posible decir <em>"a chairs"</em>?',
+    img:{objs:[{key:'chair',near:true,count:2}]},
+    opts:['Sí, en inglés informal.','No — "a" solo acompaña sustantivos singulares.','Sí, cuando hay muchas sillas.','Sí — "a" puede preceder cualquier sustantivo.'],
+    ans:1,
+    fb:['Incorrecto. Incluso en inglés informal, "a" antes de un sustantivo plural es agramatical.',
+        'Correcto. El artículo indefinido "a / an" es exclusivo de sustantivos contables en singular: "a chair", nunca "a chairs".',
+        'Incorrecto. La cantidad de objetos no cambia la regla: "a" es solo para singular.',
+        'Incorrecto. "A" no puede preceder sustantivos plurales ni incontables.']
+  },
+  {
+    q:'Señalo una silla que está justo a mi lado (singular). ¿Qué digo?',
+    img:{objs:[{key:'chair',near:true,count:1}]},
+    opts:['"That chair."','"Those chair."','"This chair."','"These chair."'],
+    ans:2,
+    fb:['Incorrecto. "That" se usa para objetos lejos del hablante.',
+        'Incorrecto. "Those" es plural y señala objetos lejos.',
+        'Correcto. "This" es el demostrativo para un objeto singular cerca del hablante.',
+        'Incorrecto. "These" es plural: el sustantivo también debería estar en plural: "these chairs".']
+  },
+  {
+    q:'<em>"Those books"</em> — ¿los libros están cerca o lejos del hablante?',
+    img:null,
+    opts:['Cerca','Lejos','La oración no lo especifica','Depende del contexto'],
+    ans:1,
+    fb:['Incorrecto. "Those" siempre indica distancia respecto al hablante.',
+        'Correcto. "Those" es el demostrativo plural para objetos lejos del hablante.',
+        'Incorrecto. En inglés, el propio demostrativo codifica la información de distancia.',
+        'Incorrecto. La palabra "those" señala inequívocamente que los objetos están lejos.']
+  },
+  {
+    q:'¿Es posible decir <em>"These is a desk"</em>?',
+    img:{objs:[{key:'desk',near:true,count:1}]},
+    opts:['Sí, "these" puede usarse con "is".','No — "these" requiere "are": "These are desks."','Sí, con un sustantivo singular.','No — debería ser "This are a desk."'],
+    ans:1,
+    fb:['Incorrecto. "These" es plural y gramaticalmente requiere el verbo plural "are".',
+        'Correcto. "These" siempre es plural y siempre usa "are". El sustantivo también debe ir en plural: "These are desks."',
+        'Incorrecto. "These" no puede combinarse con un sustantivo singular ni con "is".',
+        'Incorrecto. "This are" también es incorrecto. La concordancia correcta es "this is" (singular) o "these are" (plural).']
+  },
+  {
+    q:'Hay dos pares de tijeras sobre tu escritorio (cerca). ¿Qué dices?',
+    img:{objs:[{key:'scissors',near:true,count:2}]},
+    opts:['"That is scissors."','"This is scissors."','"Those are scissors."','"These are scissors."'],
+    ans:3,
+    fb:['Incorrecto. "That" señala un objeto singular lejos.',
+        'Incorrecto. "This" señala un objeto singular cerca.',
+        'Incorrecto. "Those" es para objetos lejos del hablante.',
+        'Correcto. "These" es el demostrativo correcto: plural (dos pares) + cerca (sobre tu escritorio). "Scissors" ya tiene forma plural.']
+  },
+  {
+    q:'¿Cuál oración tiene el orden de palabras correcto?',
+    img:{objs:[{key:'desk',near:false,count:3}]},
+    opts:['"Desks those are."','"Are those desks?"','"Those are desks."','"Those desks are."'],
+    ans:2,
+    fb:['Incorrecto. Las oraciones declarativas en inglés siguen el orden Sujeto–Verbo–Complemento.',
+        'Incorrecto. "Are those desks?" es una pregunta de sí/no, no una declaración.',
+        'Correcto. "Those are desks." sigue la estructura correcta: Sujeto (Those) + Verbo (are) + Sustantivo (desks).',
+        'Incorrecto. Colocar el sustantivo entre el demostrativo y el verbo no es orden correcto del inglés.']
+  },
+  {
+    q:'¿Con qué artículo completamos la oración: <em>"This is ___ eraser"</em>?',
+    img:{objs:[{key:'eraser',near:true,count:1}]},
+    opts:['"a eraser"','"an eraser"','"the eraser"','Sin artículo'],
+    ans:1,
+    fb:['Incorrecto. "A" se usa antes de sonidos consonánticos. "Eraser" empieza con el sonido vocálico /ɪ/, así que necesita "an".',
+        'Correcto. "An" se usa cuando el sustantivo siguiente comienza con un sonido vocálico. "Eraser" empieza con /ɪ/ → "an eraser".',
+        'Incorrecto. "The" es el artículo definido; aquí hablamos de un objeto sin especificar cuál.',
+        'Incorrecto. Los sustantivos contables singulares en inglés requieren artículo: "a" o "an".']
+  },
+  /* CCQ 10 — a vs an awareness */
+  {
+    q:'¿Por qué decimos <em>"an eraser"</em> y no <em>"a eraser"</em>?',
+    img:{objs:[{key:'eraser',near:true,count:1}]},
+    opts:[
+      'Porque "eraser" tiene muchas letras.',
+      'Porque "eraser" empieza con la letra "e".',
+      'Porque "eraser" empieza con un <strong>sonido vocálico</strong> (/ɪ/), y "an" se usa antes de sonidos vocálicos.',
+      'Porque es una regla de excepción solo para ese objeto.'
+    ],
+    ans:2,
+    fb:[
+      'Incorrecto. El artículo no depende del número de letras.',
+      'Casi. La letra "e" da la pista, pero la regla es sobre el <strong>sonido</strong>: "an" se usa antes de cualquier sonido vocálico (/a/, /e/, /ɪ/, /ɒ/, /ʌ/…), no solo antes de la letra "e".',
+      'Correcto. La regla de <em>a / an</em> depende del sonido inicial de la siguiente palabra, no de la letra. "Eraser" empieza con el sonido /ɪ/ (vocal) → usamos "an".',
+      'Incorrecto. No es una excepción; es la aplicación sistemática de la regla general: sonido vocálico → "an".'
+    ]
+  },
+];
+
+let ccqAnswered = new Set();
+(function(){
+  const c = document.getElementById('ccq-container');
+  c.innerHTML = CCQs.map((q,i)=>{
+    let imgHtml = '';
+    if(q.img){
+      imgHtml = '<div class="ccq-img">' + q.img.objs.map(o=>depthScene(o.key, o.count||1, o.near)).join('') + '</div>';
+    }
+    return `<div class="ccq-item" id="ccq-${i}">
+      <div class="ccq-q"><span class="ccq-num">${i+1}</span>${q.q}</div>
+      ${imgHtml}
+      <div class="ccq-options">${q.opts.map((o,j)=>`<button class="ccq-opt" id="ccq-${i}-${j}" onclick="answerCCQ(${i},${j})">${o}</button>`).join('')}</div>
+      <div class="ccq-feedback" id="ccq-fb-${i}"></div>
+    </div>`;
+  }).join('');
+})();
+
+function answerCCQ(qi,oi){
+  if(ccqAnswered.has(qi)) return;
+  ccqAnswered.add(qi);
+  const q = CCQs[qi];
+  for(let j=0;j<q.opts.length;j++){
+    const btn = document.getElementById(`ccq-${qi}-${j}`);
+    btn.disabled=true;
+    if(j===q.ans) btn.classList.add('correct');
+    else if(j===oi) btn.classList.add('wrong');
+  }
+  const fb = document.getElementById(`ccq-fb-${qi}`);
+  fb.classList.add('show', oi===q.ans?'ok':'err');
+  fb.innerHTML = (oi===q.ans?'✓ ':'✗ ') + q.fb[oi] + (oi!==q.ans?`<br><strong>Respuesta correcta:</strong> ${q.opts[q.ans]}`:'');
+  if(ccqAnswered.size===CCQs.length) document.getElementById('ccq-next').style.display='inline-flex';
+}
+
+/* ═══════════ ACTIVITY A ═══════════ */
+const ACT_A_ITEMS = [
+  {key:'notebook'},{key:'pencil'},{key:'ruler'},{key:'scissors'},
+  {key:'eraser'},{key:'pen'},{key:'highlighter'},{key:'sharpener'},
+];
+const ACT_A_OPTIONS = ['board','chair','desk','door','eraser','highlighter','notebook','pen','pencil','ruler','scissors','sharpener','window'];
+
+(function(){
+  const items = [...ACT_A_ITEMS].sort(()=>Math.random()-0.5);
+  document.getElementById('label-grid').innerHTML = items.map((it,i)=>`
+    <div class="label-card" id="lc-${i}" data-key="${it.key}">
+      <div class="lc-icon">${scaleSvg(SVGS[it.key],56)}</div>
+      <select id="la-${i}">
+        <option value="">— seleccionar —</option>
+        ${ACT_A_OPTIONS.map(o=>`<option value="${o}">${o}</option>`).join('')}
+      </select>
+    </div>`).join('');
+})();
+
+function verifyA(){
+  const cards = document.querySelectorAll('#label-grid .label-card');
+  let ok=0;
+  cards.forEach((card,i)=>{
+    card.classList.remove('ok','err');
+    const val = document.getElementById(`la-${i}`).value;
+    if(val===card.dataset.key){card.classList.add('ok');ok++;}
+    else card.classList.add('err');
+  });
+  document.getElementById('a-feedback').innerHTML=
+    `<span style="color:${ok===cards.length?'var(--ok-accent)':'var(--err-accent)'};font-weight:600">${ok}/${cards.length} correctas.</span>${ok<cards.length?' Revisa los elementos en rojo e inténtalo de nuevo.':' ¡Excelente trabajo!'}`;
+}
+function resetA(){
+  document.querySelectorAll('#label-grid .label-card').forEach((c,i)=>{
+    c.classList.remove('ok','err');
+    document.getElementById(`la-${i}`).value='';
+  });
+  document.getElementById('a-feedback').innerHTML='';
+}
+
+/* ═══════════ ACTIVITY B ═══════════ */
+const ACT_B_ITEMS = [
+  {key:'board',    count:1,  template:'This is a ___.', answer:'board'},
+  {key:'pencil',   count:3,  template:'These are ___.', answer:'pencils'},
+  {key:'eraser',   count:1,  template:'This is an ___.', answer:'eraser'},
+  {key:'notebook', count:2,  template:'These are ___.', answer:'notebooks'},
+  {key:'scissors', count:1,  template:'This is a pair of ___.', answer:'scissors'},
+  {key:'sharpener',count:4,  template:'These are ___.', answer:'sharpeners'},
+];
+(function(){
+  document.getElementById('singplur-list').innerHTML = ACT_B_ITEMS.map((it,i)=>{
+    const tp = it.template.split('___');
+    let icons = '';
+    const sz = it.count > 2 ? 26 : 34;
+    for(let k=0;k<it.count;k++) icons += `<div style="width:${sz}px;height:${sz}px;display:flex;align-items:flex-end">${scaleSvg(SVGS[it.key],sz)}</div>`;
+    return `<div class="sp-item">
+      <div class="sp-icons">${icons}</div>
+      <div class="sp-template"><span>${tp[0]}</span><input class="sp-input" id="spb-${i}" type="text" placeholder="..."/><span>${tp[1]}</span></div>
+    </div>`;
+  }).join('');
+})();
+function verifyB(){
+  let ok=0;
+  ACT_B_ITEMS.forEach((it,i)=>{
+    const inp=document.getElementById(`spb-${i}`);
+    inp.classList.remove('ok','err');
+    if(inp.value.trim().toLowerCase()===it.answer){inp.classList.add('ok');ok++;}
+    else inp.classList.add('err');
+  });
+  document.getElementById('b-feedback').innerHTML=
+    `<span style="color:${ok===ACT_B_ITEMS.length?'var(--ok-accent)':'var(--err-accent)'};font-weight:600">${ok}/${ACT_B_ITEMS.length} correctas.</span>${ok<ACT_B_ITEMS.length?' Revisa los campos en rojo y usa el banco de palabras.':' ¡Perfecto!'}`;
+}
+function resetB(){
+  ACT_B_ITEMS.forEach((_,i)=>{
+    const inp=document.getElementById(`spb-${i}`);
+    inp.value='';inp.classList.remove('ok','err');
+  });
+  document.getElementById('b-feedback').innerHTML='';
+}
+
+/* ═══════════ ACTIVITY C ═══════════ */
+const ACT_C_ITEMS = [
+  {key:'ruler',       labelEs:'ruler',       distance:'near', plural:false, count:1, answer:'This'},
+  {key:'pencil',      labelEs:'pencil',      distance:'near', plural:false, count:1, answer:'This'},
+  {key:'desk',        labelEs:'desks',       distance:'far',  plural:true,  count:3, answer:'Those'},
+  {key:'board',       labelEs:'board',       distance:'far',  plural:false, count:1, answer:'That'},
+  {key:'window',      labelEs:'window',      distance:'far',  plural:false, count:1, answer:'That'},
+  {key:'highlighter', labelEs:'highlighters',distance:'near', plural:true,  count:2, answer:'These'},
+];
+const DEM_OPTS=['This','That','These','Those'];
+let nfSelections={};
+
+(function(){
+  const l = document.getElementById('nearfar-list');
+  l.innerHTML = ACT_C_ITEMS.map((it,i)=>{
+    const isNear = it.distance==='near';
+    return `<div class="nf-card" id="nfi-${i}">
+      <div class="nf-card-top">
+        <div class="nf-label" lang="en">${it.labelEs}</div>
+      </div>
+      ${depthScene(it.key, it.count, isNear)}
+      <div class="nf-buttons">${DEM_OPTS.map(d=>`<button class="nf-btn" id="nfb-${i}-${d}" onclick="selectNF(${i},'${d}')">${d}</button>`).join('')}</div>
+    </div>`;
+  }).join('');
+})();
+
+function selectNF(ii,dem){
+  if(document.getElementById(`nfb-${ii}-This`).disabled) return;
+  nfSelections[ii]=dem;
+  DEM_OPTS.forEach(d=>document.getElementById(`nfb-${ii}-${d}`).classList.toggle('selected',d===dem));
+}
+function verifyC(){
+  let ok=0;
+  ACT_C_ITEMS.forEach((it,i)=>{
+    const sel=nfSelections[i];
+    DEM_OPTS.forEach(d=>{
+      const b=document.getElementById(`nfb-${i}-${d}`);
+      b.disabled=true;
+      b.classList.remove('selected','correct-show','wrong-show');
+      if(d===it.answer) b.classList.add('correct-show');
+      else if(d===sel&&sel!==it.answer) b.classList.add('wrong-show');
+    });
+    if(sel===it.answer) ok++;
+  });
+  document.getElementById('c-feedback').innerHTML=
+    `<span style="color:${ok===ACT_C_ITEMS.length?'var(--ok-accent)':'var(--err-accent)'};font-weight:600">${ok}/${ACT_C_ITEMS.length} correctas.</span>${ok<ACT_C_ITEMS.length?' Las respuestas correctas están resaltadas en verde.':' ¡Excelente!'}`;
+}
+function resetC(){
+  nfSelections={};
+  ACT_C_ITEMS.forEach((it,i)=>{
+    DEM_OPTS.forEach(d=>{
+      const b=document.getElementById(`nfb-${i}-${d}`);
+      b.disabled=false;b.classList.remove('selected','correct-show','wrong-show');
+    });
+  });
+  document.getElementById('c-feedback').innerHTML='';
+}
+
+/* ═══════════ BLOCK 5 — QUIZ ═══════════ */
+
+const QUIZ = [
+  {
+    q:'1. ¿Cuál es el plural de <em>"desk"</em>?',
+    img:null,
+    opts:['deskes','desks','desk','deskses'],ans:1,
+    fb:['Incorrecto. \"Desk\" termina en consonante simple, no en -ch/-sh/-x/-s, por lo tanto el plural es solo +s.',
+        'Correcto. El plural regular en inglés se forma añadiendo -s: desk → desks.',
+        'Incorrecto. \"Desk\" sin cambio es la forma singular.',
+        'Incorrecto. La terminación -ses no existe en inglés estándar para esta palabra.']
+  },
+  {
+    q:'2. ¿Cuál es el plural de <em>"eraser"</em>?',
+    img:null,
+    opts:['eraseres','erasers','eraser','eraserses'],ans:1,
+    fb:['Incorrecto. La terminación -es se añade solo a palabras que terminan en -ch, -sh, -x, -s.',
+        'Correcto. \"Eraser\" sigue la regla general: +s → erasers.',
+        'Incorrecto. Sin la -s final es la forma singular.',
+        'Incorrecto. La doble terminación -ses no corresponde a ninguna regla del inglés.']
+  },
+  {
+    q:'3. Completa: <em lang="en">"___ are three red chairs."</em>',
+    img:'q3',
+    opts:['This','These','That','Those'],ans:3,
+    fb:['Incorrecto. \"This\" es singular y señala objetos cerca.',
+        'Incorrecto. \"These\" es plural y cerca; aquí los objetos están lejos.',
+        'Incorrecto. \"That\" es singular y lejos; aquí hay tres sillas (plural).',
+        'Correcto. \"Those\" es el demostrativo para objetos plurales lejos del hablante.']
+  },
+  {
+    q:'4. Completa: <em lang="en">"___ is a blue pen."</em>',
+    img:'q4',
+    opts:['These','Those','This','That'],ans:2,
+    fb:['Incorrecto. \"These\" es plural y requiere \"are\", no \"is\".',
+        'Incorrecto. \"Those\" es plural y señala objetos lejos.',
+        'Correcto. \"This\" es el demostrativo singular para objetos cerca del hablante.',
+        'Incorrecto. \"That\" señala un objeto singular lejos, pero el bolígrafo está cerca.']
+  },
+  {
+    q:'5. ¿Qué imagen corresponde a la oración <em lang="en">"These are notebooks"</em>?',
+    img:'quiz5',
+    opts:null, ans:3,
+    fb:['Incorrecto. Un cuaderno lejos = \"That is a notebook\" (singular, lejos).',
+        'Incorrecto. Dos cuadernos lejos = \"Those are notebooks\" (plural, lejos).',
+        'Incorrecto. Un cuaderno cerca = \"This is a notebook\" (singular, cerca).',
+        'Correcto. Dos cuadernos cerca = \"These are notebooks\": plural (dos) + cerca de la persona.']
+  },
+  {
+    q:'6. ¿Cuál oración es correcta?',
+    img:null,
+    opts:['Is a board.','Board this is.','This is a board.','This are a board.'],ans:2,
+    fb:['Incorrecto. En inglés el sujeto no puede omitirse; toda oración necesita un sujeto explícito.',
+        'Incorrecto. El orden es incorrecto; en inglés la estructura es Sujeto + Verbo + Complemento.',
+        'Correcto. Sujeto (This) + Verbo (is) + Artículo (a) + Sustantivo (board). Estructura perfecta.',
+        'Incorrecto. \"This\" es singular y necesita el verbo \"is\", no \"are\".']
+  },
+  {
+    q:'7. Completa: <em lang="en">"___ is a highlighter."</em>',
+    img:'q7',
+    opts:['This','These','Those','That'],ans:3,
+    fb:['Incorrecto. \"This\" señala un objeto cerca, pero el resaltador está lejos.',
+        'Incorrecto. \"These\" es plural y señala objetos cerca.',
+        'Incorrecto. \"Those\" es plural y señala objetos lejos; aquí hay un solo resaltador.',
+        'Correcto. \"That\" es el demostrativo para un objeto singular lejos del hablante.']
+  },
+  {
+    q:'8. ¿Cuál oración es <strong>incorrecta</strong>?',
+    img:null,
+    opts:['These are desks.','Those is a door.','This is a pen.','That is a ruler.'],ans:1,
+    fb:['Incorrecto. \"These are desks.\" es correcta (plural + are + plural), así que no es la oración que buscamos.',
+        'Correcto. \"Those is a door.\" es la incorrecta: \"those\" es plural y exige \"are\", no \"is\".',
+        'Incorrecto. \"This is a pen.\" es una oración correcta (singular + is + artículo + sustantivo), no la que buscamos.',
+        'Incorrecto. \"That is a ruler.\" es una oración correcta, no la que buscamos.']
+  },
+  {
+    q:'9. Completa: <em lang="en">"This is ___ eraser."</em> (empieza con sonido vocálico)',
+    img:'q9',
+    opts:['a','an','the','—'],ans:1,
+    fb:['Incorrecto. \"A\" se usa antes de un sonido consonántico. \"Eraser\" empieza con un sonido vocálico (/ɪ/), así que necesita \"an\".',
+        'Correcto. \"An\" se usa cuando la palabra siguiente empieza con un sonido vocálico. \"Eraser\" empieza con /ɪ/ → an eraser.',
+        'Incorrecto. \"The\" es el artículo definido; aquí hablamos de un objeto sin especificar cuál en particular.',
+        'Incorrecto. Los sustantivos contables singulares en inglés requieren artículo: \"a\" o \"an\".']
+  },
+  {
+    q:'10. Hay varias ventanas al fondo del salón. ¿Cómo las señalas?',
+    img:'q10',
+    opts:['These are windows.','This are windows.','Those are windows.','That are windows.'],ans:2,
+    fb:['Incorrecto. \"These\" señala objetos cercanos al hablante, pero las ventanas están lejos.',
+        'Incorrecto. \"This\" es singular; además no concuerda con el verbo plural \"are\".',
+        'Correcto. \"Those\" = plural + lejos. \"Are\" = verbo plural. \"Windows\" = plural. Todo concuerda.',
+        'Incorrecto. \"That\" es singular y lejos; con plural se necesita \"those are\".']
+  },
+];
+
+let quizSelections={};
+(function(){
+  const c=document.getElementById('quiz-container');
+  c.innerHTML = QUIZ.map((q,i)=>{
+    let imgHtml='';
+
+    if(q.img==='quiz5'){
+      const scenes=[
+        depthScene('notebook',1,false), // A) one notebook, far
+        depthScene('notebook',2,false), // B) two notebooks, far
+        depthScene('notebook',1,true),  // C) one notebook, near
+        depthScene('notebook',2,true)   // D) two notebooks, near
+      ];
+      imgHtml = `<div class="quiz-img-row">` + scenes.map((sc,j)=>`
+        <div class="quiz-img-opt" id="qimg-5-${j}" role="button" tabindex="0" aria-label="Opción ${'ABCD'[j]}" onclick="selectQuiz(4,${j})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectQuiz(4,${j});}" style="cursor:pointer;padding:8px;border-radius:10px;border:2px solid var(--border);transition:all .15s">
+          ${sc}
+          <div style="margin-top:6px;font-size:14px;font-weight:700;text-align:center">${'ABCD'[j]}</div>
+        </div>`).join('') + `</div>`;
+      return `<div class="quiz-item" id="qi-${i}"><div class="quiz-q">${q.q}</div>${imgHtml}<div class="ccq-feedback" id="qfb-${i}"></div></div>`;
+    }
+
+    // context images for questions 3,4,7,9,10 — visual near/far via depth scene
+    if(q.img==='q3'){
+      imgHtml = `<div class="quiz-img-context2">${depthScene('chair',3,false)}</div>`;
+    } else if(q.img==='q4'){
+      imgHtml = `<div class="quiz-img-context2">${depthScene('pen',1,true)}</div>`;
+    } else if(q.img==='q7'){
+      imgHtml = `<div class="quiz-img-context2">${depthScene('highlighter',1,false)}</div>`;
+    } else if(q.img==='q9'){
+      imgHtml = `<div class="quiz-img-context2">${depthScene('eraser',1,true)}</div>`;
+    } else if(q.img==='q10'){
+      imgHtml = `<div class="quiz-img-context2">${depthScene('window',2,false)}</div>`;
+    }
+
+    return `<div class="quiz-item" id="qi-${i}">
+      <div class="quiz-q">${q.q}</div>
+      ${imgHtml}
+      <div class="quiz-opts">${q.opts.map((o,j)=>`<button class="quiz-opt" id="qo-${i}-${j}" onclick="selectQuiz(${i},${j})">${o}</button>`).join('')}</div>
+      <div class="ccq-feedback" id="qfb-${i}"></div>
+    </div>`;
+  }).join('');
+})();
+
+function selectQuiz(qi,oi){
+  quizSelections[qi]=oi;
+  if(qi===4){
+    for(let j=0;j<4;j++){
+      const el=document.getElementById(`qimg-5-${j}`);
+      if(el) el.style.borderColor = j===oi?'var(--slate-green)':'var(--border)';
+      if(el) el.style.background = j===oi?'#e8f0e8':'';
+    }
+  } else {
+    for(let j=0;j<QUIZ[qi].opts.length;j++)
+      document.getElementById(`qo-${qi}-${j}`).classList.toggle('selected',j===oi);
+  }
+}
+
+function submitQuiz(){
+  let score=0;
+  QUIZ.forEach((q,i)=>{if(quizSelections[i]===q.ans) score++;});
+  QUIZ.forEach((q,i)=>{
+    const sel=quizSelections[i];
+    const correct=sel===q.ans;
+    if(i===4){
+      for(let j=0;j<4;j++){
+        const el=document.getElementById(`qimg-5-${j}`);
+        if(el){
+          el.style.pointerEvents='none';
+          if(j===q.ans) el.style.borderColor='var(--ok-accent)';
+          else if(j===sel&&!correct) el.style.borderColor='var(--err-accent)';
+        }
+      }
+    } else {
+      for(let j=0;j<q.opts.length;j++){
+        const btn=document.getElementById(`qo-${i}-${j}`);
+        btn.disabled=true;
+        btn.classList.remove('selected');
+        if(j===q.ans) btn.classList.add('correct');
+        else if(j===sel&&!correct) btn.classList.add('wrong');
+      }
+    }
+    // per-question feedback
+    if(q.fb && sel!==undefined){
+      const fb=document.getElementById(`qfb-${i}`);
+      if(fb){
+        fb.classList.add('show', correct?'ok':'err');
+        fb.innerHTML=(correct?'✓ ':'✗ ')+q.fb[sel]+((!correct)&&q.fb[q.ans]?`<br><strong>Respuesta correcta:</strong> ${i===4?['A) un cuaderno, lejos','B) dos cuadernos, lejos','C) un cuaderno, cerca','D) dos cuadernos, cerca'][q.ans]:q.opts[q.ans]}`:'');
+      }
+    }
+  });
+  document.getElementById('quiz-actions').style.display='none';
+  const panel=document.getElementById('score-panel');
+  panel.style.display='block';
+  document.getElementById('score-num').textContent=score;
+  let title,text;
+  if(score>=9){title='¡Sobresaliente!';text='Tienes un dominio sólido del contenido de la Sesión ocho.';}
+  else if(score>=7){title='Muy bien';text='Buen desempeño. Revisa las preguntas que fallaste.';}
+  else if(score>=5){title='Satisfactorio';text='Vas por buen camino. Revisa los Bloques dos–tres y vuelve a intentarlo.';}
+  else{title='Sigue practicando';text='Regresa a los Bloques uno–tres para reforzar los conceptos y luego reintenta.';}
+  document.getElementById('score-title').textContent=title;
+  document.getElementById('score-text').textContent=text;
+  const rl=document.getElementById('review-list');
+  rl.innerHTML=QUIZ.map((q,i)=>{
+    const correct=quizSelections[i]===q.ans;
+    const yourAns=quizSelections[i]!==undefined?(i===4?['A) un cuaderno, lejos','B) dos cuadernos, lejos','C) un cuaderno, cerca','D) dos cuadernos, cerca'][quizSelections[i]]:q.opts[quizSelections[i]]):'(sin respuesta)';
+    const correctAns=i===4?['A) un cuaderno, lejos','B) dos cuadernos, lejos','C) un cuaderno, cerca','D) dos cuadernos, cerca'][q.ans]:q.opts[q.ans];
+    return `<div class="review-item ${correct?'ok':'err'}">
+      <div class="ri-q">${q.q}</div>
+      ${!correct?`<div class="ri-yours">Tu respuesta: ${yourAns}</div>`:''}
+      <div class="ri-correct">Respuesta correcta: ${correctAns}</div>
+    </div>`;
+  }).join('');
+}
+function retryQuiz(){
+  quizSelections={};
+  QUIZ.forEach((q,i)=>{
+    if(i===4){
+      for(let j=0;j<4;j++){
+        const el=document.getElementById(`qimg-5-${j}`);
+        if(el){el.style.pointerEvents='';el.style.borderColor='var(--border)';el.style.background='';}
+      }
+    } else {
+      for(let j=0;j<q.opts.length;j++){
+        const b=document.getElementById(`qo-${i}-${j}`);
+        b.disabled=false;b.classList.remove('selected','correct','wrong');
+      }
+    }
+    const fb=document.getElementById(`qfb-${i}`);
+    if(fb){fb.className='ccq-feedback';fb.innerHTML='';}
+  });
+  document.getElementById('quiz-actions').style.display='flex';
+  document.getElementById('score-panel').style.display='none';
+  document.getElementById('review-list').classList.remove('show');
+}
+function toggleReview(){document.getElementById('review-list').classList.toggle('show');}
+
+/* ═══════════ NAVIGATION + PERSISTENCE ═══════════ */
+let currentBlock=1, maxReached=1;
+const STORE_KEY='ova_s8_v4';
+
+function saveState(){
+  try{
+    const g=id=>(document.getElementById(id)||{}).value||'';
+    localStorage.setItem(STORE_KEY, JSON.stringify({
+      block:currentBlock, max:maxReached,
+      hyp1:g('hyp1'), hyp2:g('hyp2'), hyp3:g('hyp3'),
+      prod1:g('prod-1'), prod2:g('prod-2'), prod3:g('prod-3')
+    }));
+  }catch(e){/* almacenamiento no disponible — se degrada en silencio */}
+}
+
+function renderProgress(n){
+  for(let i=1;i<=5;i++){
+    const ps=document.getElementById(`ps-${i}`);
+    ps.classList.remove('active','done');
+    if(i<n) ps.classList.add('done');
+    else if(i===n) ps.classList.add('active');
+    const can = (i<=maxReached && i!==n);
+    ps.classList.toggle('clickable', can);
+    ps.setAttribute('tabindex', can?'0':'-1');
+    ps.setAttribute('aria-label', `Ir al bloque ${i}`);
+    if(i<5) document.getElementById(`pc-${i}`).classList.toggle('done-line',i<n);
+    document.querySelector(`#ps-${i} .dot`).textContent = (i<n?'✓':i);
+  }
+}
+
+function goTo(n){
+  document.getElementById(`block-${currentBlock}`).classList.remove('active');
+  document.getElementById(`block-${n}`).classList.add('active');
+  currentBlock=n;
+  if(n>maxReached) maxReached=n;
+  renderProgress(n);
+  saveState();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* clickable progress steps — only to already-visited blocks */
+for(let i=1;i<=5;i++){
+  const ps=document.getElementById(`ps-${i}`);
+  ps.setAttribute('role','button');
+  ps.addEventListener('click',()=>{ if(i<=maxReached) goTo(i); });
+  ps.addEventListener('keydown',e=>{ if((e.key==='Enter'||e.key===' ')&&i<=maxReached){e.preventDefault();goTo(i);} });
+}
+
+/* persist typed work */
+['hyp1','hyp2','hyp3','prod-1','prod-2','prod-3'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('input', saveState);
+});
+
+/* restore previous session (typed work + unlocked steps; no auto-jump) */
+(function restore(){
+  let data=null; try{ data=JSON.parse(localStorage.getItem(STORE_KEY)||'null'); }catch(e){}
+  if(data){
+    const set=(id,v)=>{ const el=document.getElementById(id); if(el&&v) el.value=v; };
+    set('hyp1',data.hyp1); set('hyp2',data.hyp2); set('hyp3',data.hyp3);
+    set('prod-1',data.prod1); set('prod-2',data.prod2); set('prod-3',data.prod3);
+    maxReached=Math.min(Math.max(data.max||1,1),5);
+  }
+  renderProgress(1);
+})();
+
+/* ═══════════ SCREEN FLOW: cover → intro → lesson ═══════════ */
+(function(){
+  const cv=document.getElementById('cover-visual');
+  if(cv) cv.innerHTML=['desk','chair','board','pen'].map(k=>`<div>${scaleSvg(SVGS[k],46)}</div>`).join('');
+})();
+function show(id){ ['cover','intro','lesson'].forEach(s=>{const el=document.getElementById(s); if(el) el.style.display = s===id?'block':'none';}); window.scrollTo({top:0,behavior:'smooth'}); }
+function enterIntro(){ show('intro'); }
+function backToCover(){ show('cover'); }
+function enterLesson(){ show('lesson'); }
+</script>
+</body>
+</html>
